@@ -1,0 +1,25 @@
+{
+  "name": "pins",
+  "version": "1.0.0",
+  "description": "First live deployed app test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xvargr/Pins.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xvargr/Pins/issues"
+  },
+  "homepage": "https://github.com/xvargr/Pins#readme",
+  "dependencies": {
+    "ejs": "^3.1.7",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.2"
+  }
+}
