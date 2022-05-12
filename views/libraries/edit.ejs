@@ -4,46 +4,63 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Editing <%= result.name %></title>
+    <title><%= result.name %></title>
   </head>
   <body>
-    <h1>Report new library</h1>
-    <form action="/libraries" method="post">
+    <h1>Editing <%= result.name %></h1>
+
+    <form action="/libraries/<%= result._id %>?_method=put" method="post">
       <div>
         <label for="name">Name:</label>
-        <input type="text" name="newLib[name]" id="name" value="result.name" />
+        <input
+          type="text"
+          name="lib[name]"
+          id="name"
+          value="<%=result.name%>"
+        />
       </div>
       <div>
         <label for="description">Description:</label>
         <input
           type="text"
-          name="newLib[description]"
+          name="lib[description]"
           id="description"
-          value="result.description"
+          value="<%=result.description%>"
         />
       </div>
       <div>
         <label for="location">Location:</label>
         <input
           type="text"
-          name="newLib[location]"
+          name="lib[location]"
           id="location"
-          value="result.location"
+          value="<%=result.location%>"
         />
       </div>
       <!-- <div>
         <label for="location">Location:</label>
-        <select name="newLib[location]" id="location">
+        <select name="lib[location]" id="location">
           <option value="" disabled>--Select location--</option>
         </select>
       </div> -->
       <div>
         <label for="fee">Fee:</label>
-        <input type="number" name="newLib[fee]" id="fee" value="result.fee" />
+        <input
+          type="number"
+          name="lib[fee]"
+          id="fee"
+          value="<%=result.fee%>"
+          step="0.01"
+        />
       </div>
-      <div>
-        <button>Create new library</button> <a href="/libraries">Back</a>
-      </div>
+      <div><button>Submit</button></div>
     </form>
+
+    <div>
+      <a href="/libraries/<%= result.id %>">&lt;-- Back</a>
+      <form action="/libraries/<%= result.id %>?_method=delete" method="post">
+        <button>Delete</button>
+      </form>
+    </div>
   </body>
 </html>

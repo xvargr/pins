@@ -8,12 +8,13 @@ app.set("view engine", "ejs"); //set views engine to ejs
 app.set("views", path.join(__dirname, "views")); //set views directory to a dynamic directory
 
 const formMethod = require("method-override"); //gives forms access to more methods
-app.use(formMethod("_method"));
+app.use(formMethod("_method")); //defining methodOverride query value
 
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 
 const Library = require("./models/libraries"); //import library model
 const libraries = require("./models/libraries");
+const { findByIdAndUpdate } = require("./models/libraries");
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
@@ -54,11 +55,11 @@ app.get("/libraries/new", function (req, res) {
 app.get("/libraries/:id", async function (req, res) {
   const { id } = req.params; //destructure req.params to get id
   const result = await Library.findById(id);
+  console.log(result);
   res.render("libraries/details", { result });
 }); //details route for specific libraries
 
-//    ↓↓↓↓↓ CANNOT GET! ↓↓↓↓↓
-app.get("libraries/:id/edit", async function (req, res) {
+app.get("/libraries/:id/edit", async function (req, res) {
   const { id } = req.params;
   const result = await Library.findById(id);
   res.render("libraries/edit", { result });
@@ -66,11 +67,25 @@ app.get("libraries/:id/edit", async function (req, res) {
 
 app.post("/libraries", async function (req, res) {
   //res.send(req.body); //by default, req.body is empty, it needs to be parsed
-  const newLib = new Library(req.body.newLib);
-  await newLib.save();
-  res.redirect(`/libraries/${newLib._id}`);
+  const lib = new Library(req.body.lib);
+  await lib.save();
+  res.redirect(`/libraries/${lib._id}`);
+}); // post req new library
+
+app.put("/libraries/:id", async function (req, res) {
+  const { id } = req.params;
+  await Library.findByIdAndUpdate(id, { ...req.body.lib }); //spread operator pass all elements of iterable lib
+  res.redirect(`/libraries/${id}`);
+  //const newLib = false;
+  //findByIdAndUpdate(req.params.id, )
 });
 
+app.delete("/libraries/:id", async function (req, res) {
+  console.log("here");
+  const { id } = req.params;
+  await Library.findByIdAndDelete(id);
+  res.redirect("/libraries");
+});
 // app.get("/newlibrary", async function (req, res) {
 //   const lib = new Library({
 //     name: "Test Library",
