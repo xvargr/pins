@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= result.name %></title>
-  </head>
-  <body>
-    <h1><%= result.name %></h1>
-    <ul>
-      <li>Description: <%= result.description %></li>
-      <li>Location: <%= result.location %></li>
-      <li>Fee: <%= result.fee %></li>
-    </ul>
-    <div>
-      <a href="/libraries">&lt;-- Back</a>
-      <a href="/libraries/<%= result._id %>/edit">Edit</a>
-    </div>
-  </body>
-</html>
+<!-- use ejs-mate /views/boilerplate layout -->
+<% layout("layouts/boilerplate") %>
+
+<h1><%= result.name %></h1>
+<ul>
+  <li>Description: <%= result.description %></li>
+  <li>Location: <%= result.location %></li>
+  <li>Fee: <%= result.fee %></li>
+</ul>
+<div>
+  <a href="/libraries">&lt;-- Back</a>
+  <a href="/libraries/<%= result._id %>/edit">Edit</a>
+</div>

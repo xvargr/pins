@@ -1,66 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= result.name %></title>
-  </head>
-  <body>
-    <h1>Editing <%= result.name %></h1>
+<!-- use ejs-mate /views/boilerplate layout -->
+<% layout("layouts/boilerplate") %>
 
-    <form action="/libraries/<%= result._id %>?_method=put" method="post">
-      <div>
-        <label for="name">Name:</label>
-        <input
-          type="text"
-          name="lib[name]"
-          id="name"
-          value="<%=result.name%>"
-        />
-      </div>
-      <div>
-        <label for="description">Description:</label>
-        <input
-          type="text"
-          name="lib[description]"
-          id="description"
-          value="<%=result.description%>"
-        />
-      </div>
-      <div>
-        <label for="location">Location:</label>
-        <input
-          type="text"
-          name="lib[location]"
-          id="location"
-          value="<%=result.location%>"
-        />
-      </div>
-      <!-- <div>
+<h1>Editing <%= result.name %></h1>
+
+<form action="/libraries/<%= result._id %>?_method=put" method="post">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" name="lib[name]" id="name" value="<%=result.name%>" />
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <input
+      type="text"
+      name="lib[description]"
+      id="description"
+      value="<%=result.description%>"
+    />
+  </div>
+  <div>
+    <label for="location">Location:</label>
+    <input
+      type="text"
+      name="lib[location]"
+      id="location"
+      value="<%=result.location%>"
+    />
+  </div>
+  <!-- <div>
         <label for="location">Location:</label>
         <select name="lib[location]" id="location">
           <option value="" disabled>--Select location--</option>
         </select>
       </div> -->
-      <div>
-        <label for="fee">Fee:</label>
-        <input
-          type="number"
-          name="lib[fee]"
-          id="fee"
-          value="<%=result.fee%>"
-          step="0.01"
-        />
-      </div>
-      <div><button>Submit</button></div>
-    </form>
+  <div>
+    <label for="fee">Fee:</label>
+    <input
+      type="number"
+      name="lib[fee]"
+      id="fee"
+      value="<%=result.fee%>"
+      step="0.01"
+    />
+  </div>
+  <div><button>Submit</button></div>
+</form>
 
-    <div>
-      <a href="/libraries/<%= result.id %>">&lt;-- Back</a>
-      <form action="/libraries/<%= result.id %>?_method=delete" method="post">
-        <button>Delete</button>
-      </form>
-    </div>
-  </body>
-</html>
+<div>
+  <a href="/libraries/<%= result.id %>">&lt;-- Back</a>
+  <form action="/libraries/<%= result.id %>?_method=delete" method="post">
+    <button>Delete</button>
+  </form>
+</div>
