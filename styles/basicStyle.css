@@ -1,0 +1,286 @@
+/* reset all styles for browser compatibility */
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Style begin */
+
+/* FONTS
+font-family: 'Barlow', sans-serif;
+font-family: 'Open Sans', sans-serif;
+font-family: 'Rubik', sans-serif;
+*/
+
+body {
+  background-color: rgb(43, 43, 43);
+}
+
+/* Header with image */
+.mainTitle {
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 4rem;
+  text-transform: uppercase;
+  margin: 0;
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  transition: all 0.2s ease-in;
+}
+.mainHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  background: url("https://freestocks.org/fs/wp-content/uploads/2018/05/pile_of_books-1024x683.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s ease-in;
+}
+
+/* Basics */
+h1 {
+  font-family: "Barlow", sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 3rem;
+  text-transform: uppercase;
+  color: rgb(0, 121, 64);
+  margin: 1rem;
+}
+
+a {
+  font-family: "Open Sans", sans-serif;
+  color: rgb(86, 192, 143);
+  transition: all 50ms ease-in;
+  text-decoration: none;
+  margin: 0 1rem;
+}
+a:hover {
+  color: rgb(104, 240, 176);
+}
+
+/* navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Open Sans", sans-serif;
+  background-color: rgb(0, 121, 64);
+  position: sticky;
+  top: 0px;
+  height: 5.5vh;
+}
+.navbar a {
+  color: rgb(255, 255, 255);
+  margin: 0.5rem;
+}
+
+.logo {
+  color: rgb(255, 255, 255);
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 15%;
+  padding-left: 1rem;
+}
+
+.wideHeaderItems {
+  display: flex;
+  justify-content: space-evenly;
+  width: 20rem;
+}
+
+.headerSpacer {
+  width: 15%;
+  padding-right: 1rem;
+}
+
+.burger {
+  display: none;
+  height: 2rem;
+  width: 2rem;
+  margin-right: 1rem;
+  /* padding: 0.1rem; */
+  cursor: pointer;
+  /* border: 0.1rem solid black; */
+  border-radius: 0.4rem;
+}
+/* .burger:hover {
+} */
+.burger div {
+  width: 90%;
+  height: 10%;
+  background-color: white;
+}
+
+@media (max-width: 900px) {
+  .headerSpacer {
+    display: none;
+  }
+  .burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .wideHeaderItems {
+    display: none;
+  }
+  .mobileHeaderItems {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    position: fixed;
+    right: 0;
+    top: 5.5vh;
+    height: 15vh;
+    width: 100%;
+    background-color: rgb(0, 82, 44);
+    transform: translateY(-15vh);
+    transition: all 0.25s ease-in 0.3s;
+  }
+  /* after hours of experimentation trying to get the .headerItems element 
+  (which was originally a child of .mainHeader) to z-index behind .mainHeader, 
+  I learned that a child element cannot ever escape the z-index of the parent 
+  element, each child of an element is assigned a z-index inside of the parent 
+  element, and the z-index of the child can only be manipulated within the 
+  container that is the parent element. */
+}
+
+.mobileHeaderItemsActive {
+  transform: translateY(0);
+}
+
+.headerHidden {
+  height: 0;
+}
+
+.titleHidden {
+  opacity: 0;
+}

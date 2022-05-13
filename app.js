@@ -2,7 +2,11 @@
 
 const express = require("express"); //import the express npm module for easy server setup
 const app = express(); //mapping express to app
+
 const path = require("path"); //import path npm module to work with folder structure easier
+
+const engine = require("ejs-mate"); //import ejs-mate engine for templating and boilerplate
+app.engine("ejs", engine); //change default engine to ejs-mate
 
 app.set("view engine", "ejs"); //set views engine to ejs
 app.set("views", path.join(__dirname, "views")); //set views directory to a dynamic directory
@@ -13,8 +17,6 @@ app.use(formMethod("_method")); //defining methodOverride query value
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 
 const Library = require("./models/libraries"); //import library model
-const libraries = require("./models/libraries");
-const { findByIdAndUpdate } = require("./models/libraries");
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
@@ -33,6 +35,7 @@ db.once("open", function () {
 const port = 3000; //set listening port to this
 
 app.use(express.urlencoded({ extended: true })); //express middleware body parser
+app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
 
 app.listen(port, function () {
   console.log("---> App started");
@@ -55,7 +58,6 @@ app.get("/libraries/new", function (req, res) {
 app.get("/libraries/:id", async function (req, res) {
   const { id } = req.params; //destructure req.params to get id
   const result = await Library.findById(id);
-  console.log(result);
   res.render("libraries/details", { result });
 }); //details route for specific libraries
 
@@ -76,16 +78,14 @@ app.put("/libraries/:id", async function (req, res) {
   const { id } = req.params;
   await Library.findByIdAndUpdate(id, { ...req.body.lib }); //spread operator pass all elements of iterable lib
   res.redirect(`/libraries/${id}`);
-  //const newLib = false;
-  //findByIdAndUpdate(req.params.id, )
-});
+}); //update route
 
 app.delete("/libraries/:id", async function (req, res) {
-  console.log("here");
   const { id } = req.params;
   await Library.findByIdAndDelete(id);
   res.redirect("/libraries");
-});
+}); //delete route
+
 // app.get("/newlibrary", async function (req, res) {
 //   const lib = new Library({
 //     name: "Test Library",
