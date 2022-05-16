@@ -42,9 +42,12 @@ app.listen(port, function () {
   console.log(`---> Listening on port ${port}`);
 }); //express start server
 
+// TODO: streamline requests with more advanced express router to
+// reduce duplicate code
+
 app.get("/libraries", async function (req, res) {
   const result = await Library.find({});
-  res.render("libraries/index", { result });
+  res.render("libraries/index", { result, req });
 }); //run this when receiving get request to "/"
 
 //; if get /:id is placed before /new, express will try to
@@ -52,19 +55,19 @@ app.get("/libraries", async function (req, res) {
 //place get /new first to solve this issue
 
 app.get("/libraries/new", function (req, res) {
-  res.render("libraries/new");
+  res.render("libraries/new", { req });
 }); //new form route for to create libraries
 
 app.get("/libraries/:id", async function (req, res) {
   const { id } = req.params; //destructure req.params to get id
   const result = await Library.findById(id);
-  res.render("libraries/details", { result });
+  res.render("libraries/details", { result, req });
 }); //details route for specific libraries
 
 app.get("/libraries/:id/edit", async function (req, res) {
   const { id } = req.params;
   const result = await Library.findById(id);
-  res.render("libraries/edit", { result });
+  res.render("libraries/edit", { result, req });
 }); //serve edit form
 
 app.post("/libraries", async function (req, res) {
