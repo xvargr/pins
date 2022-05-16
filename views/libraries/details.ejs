@@ -1,13 +1,14 @@
 <!-- use ejs-mate /views/boilerplate layout -->
 <% layout("layouts/boilerplate") %>
-
-<h1><%= result.name %></h1>
-<ul>
-  <li>Description: <%= result.description %></li>
-  <li>Location: <%= result.location %></li>
-  <li>Fee: <%= result.fee %></li>
-</ul>
-<div>
-  <a href="/libraries">&lt;-- Back</a>
-  <a href="/libraries/<%= result._id %>/edit">Edit</a>
-</div>
+<main>
+  <h1><%= result.name %></h1>
+  <ul>
+    <li>Description: <%= result.description %></li>
+    <li>Location: <%= result.location %></li>
+    <li>Fee: <%= result.fee %></li>
+  </ul>
+  <div>
+    <a href="/libraries">&lt;-- Back</a>
+    <a href="/libraries/<%= result._id %>/edit">Edit</a>
+  </div>
+</main>

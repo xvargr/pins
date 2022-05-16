@@ -133,13 +133,8 @@ font-family: 'Open Sans', sans-serif;
 font-family: 'Rubik', sans-serif;
 */
 
-body {
-  background-color: rgb(43, 43, 43);
-}
-
 /* Header with image */
 .mainTitle {
-  font-family: "Open Sans", sans-serif;
   font-weight: bold;
   font-style: italic;
   font-size: 4rem;
@@ -164,6 +159,23 @@ body {
 }
 
 /* Basics */
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+  background-color: rgb(43, 43, 43);
+  font-family: "Open Sans", sans-serif;
+  color: rgb(212, 212, 212);
+}
+
+main {
+  margin: 0 1rem;
+}
+main > * {
+  margin: 1rem 0;
+}
+
 h1 {
   font-family: "Barlow", sans-serif;
   font-weight: bold;
@@ -171,11 +183,9 @@ h1 {
   font-size: 3rem;
   text-transform: uppercase;
   color: rgb(0, 121, 64);
-  margin: 1rem;
 }
 
 a {
-  font-family: "Open Sans", sans-serif;
   color: rgb(86, 192, 143);
   transition: all 50ms ease-in;
   text-decoration: none;
@@ -190,7 +200,6 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "Open Sans", sans-serif;
   background-color: rgb(0, 121, 64);
   position: sticky;
   top: 0px;
@@ -215,6 +224,10 @@ a:hover {
   width: 20rem;
 }
 
+.mobileHeaderItems {
+  display: none;
+}
+
 .headerSpacer {
   width: 15%;
   padding-right: 1rem;
@@ -230,7 +243,7 @@ a:hover {
   /* border: 0.1rem solid black; */
   border-radius: 0.4rem;
 }
-/* .burger:hover {
+/* .burger:hover { TODO
 } */
 .burger div {
   width: 90%;
@@ -238,6 +251,7 @@ a:hover {
   background-color: white;
 }
 
+/* Switch from mobile headers to desktop header based on width */
 @media (max-width: 900px) {
   .headerSpacer {
     display: none;
@@ -273,6 +287,7 @@ a:hover {
   container that is the parent element. */
 }
 
+/* Supporting styles to toggle allow headers to hide */
 .mobileHeaderItemsActive {
   transform: translateY(0);
 }
@@ -283,4 +298,12 @@ a:hover {
 
 .titleHidden {
   opacity: 0;
+}
+
+/* footer */
+.mainFooter {
+  width: auto;
+  background-color: rgb(0, 82, 44);
+  padding: 0.5rem 0.5rem;
+  margin-top: auto;
 }
