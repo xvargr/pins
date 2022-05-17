@@ -4,6 +4,7 @@ const Schema = mongoose.Schema; //maps Schema to mongoose.Schema as a shortcut
 const LibrarySchema = new Schema({
   name: String,
   description: String,
+  image: String,
   fee: Number,
   location: String,
 }); //defining the schema for libraries

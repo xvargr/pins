@@ -2,10 +2,11 @@
 <% layout("layouts/boilerplate") %>
 <main>
   <h1><%= result.name %></h1>
+  <img src="<%= result.image %> " class="detailsImage" />
   <ul>
     <li>Description: <%= result.description %></li>
     <li>Location: <%= result.location %></li>
-    <li>Fee: <%= result.fee %></li>
+    <li>Fee: $<%= result.fee %></li>
   </ul>
   <div>
     <a href="/libraries">&lt;-- Back</a>
