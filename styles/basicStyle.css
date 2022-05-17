@@ -307,3 +307,71 @@ a:hover {
   padding: 0.5rem 0.5rem;
   margin-top: auto;
 }
+
+/* Details page specific */
+.detailsImage {
+  display: block;
+  max-height: 40vh;
+  margin: auto;
+}
+
+/* index page specific */
+.columnContainer {
+  background-color: rgb(117, 117, 117);
+  display: flex;
+  flex-direction: column;
+  padding: 2% 2%;
+  border-radius: 1rem;
+}
+
+.columnContent {
+  display: flex;
+  margin: 0.5rem 0;
+  background-color: rgb(56, 56, 56);
+  border-radius: 0.5rem;
+  min-height: 10vh;
+}
+.columnContent > div {
+  margin: 0.5rem;
+}
+
+.indexImage {
+  max-width: 20%;
+  border-radius: 0.5rem 0 0 0.5rem;
+  object-fit: cover;
+}
+
+.indexTitle {
+  color: rgb(0, 121, 64);
+  font-weight: bold;
+}
+
+.indexInfo {
+  font-size: 90%;
+  text-overflow: ellipsis;
+}
+
+/* .indexInfo {
+  font-size: 70%;
+} */
+
+@media (max-width: 900px) {
+  .columnContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+  .columnContent {
+    max-width: 45%;
+    margin: 0.5rem;
+  }
+  .indexImage {
+    max-width: 40%;
+  }
+}
+
+@media (max-width: 840px) {
+  .indexImage {
+    display: none;
+  }
+}

@@ -2,12 +2,19 @@
 <% layout("layouts/boilerplate") %>
 <main>
   <h1>Showing all libraries</h1>
-  <div><a href="/libraries/new">New library</a></div>
-  <ul>
+  <div class="columnContainer">
     <% for (let libs of result) { %>
-    <li>
-      <a href="/libraries/<%= libs._id %>"><%= libs.name %></a>
-    </li>
+    <div class="columnContent">
+      <img src="<%= libs.image  %> " alt="" class="indexImage" />
+      <div>
+        <span class="indexTitle"><%= libs.name %></span>
+        <ul class="indexInfo">
+          <li><%= libs.description %></li>
+          <li><%= libs.location %></li>
+          <li>$<%= libs.fee %></li>
+        </ul>
+      </div>
+    </div>
     <% } %>
-  </ul>
+  </div>
 </main>
