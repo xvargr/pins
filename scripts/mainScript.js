@@ -4,8 +4,8 @@ function navSlide() {
   const nav = document.querySelector(".mobileHeaderItems");
   const mainHeader = document.querySelector(".mainHeader");
   const mainTitle = document.querySelector(".mainTitle");
-  const headerItems = document.querySelectorAll(".mobileHeaderItems li");
 
+  // add event to the burger which toggles visibility of menus
   burger.addEventListener("click", function () {
     nav.classList.toggle("mobileHeaderItemsActive");
     mainHeader.classList.toggle("headerHidden");
@@ -13,15 +13,21 @@ function navSlide() {
   }); //toggle navbar menu
 }
 
-// TODO create event delegation for cards to link to show page
-// index page card links
-// const indexCards = document.querySelector(".columnContainer");
-
-// indexCards.addEventListener(e) {
-//   let target = e.target;
-//   console.log(e);
-//   // if (target === )
-// }
+// add event listener that goes to specific link of lib to each card
+// tried to use event delegation but this turned out to be easier
+// massive problem trying to get data like the specific link of each card
+//-// after completing this I discovered that you can directly inject
+//-// variables into the js file on teh page
+function cardLink() {
+  if (window.location.pathname === "/libraries") {
+    const indexContainer = document.querySelector(".columnContainer");
+    for (let card of indexContainer.children) {
+      card.addEventListener("click", function (e) {
+        window.location = `/libraries/${card.children[1].firstElementChild.id}`;
+      });
+    }
+  }
+}
 
 function app() {
   navSlide();
