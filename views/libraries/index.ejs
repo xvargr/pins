@@ -1,5 +1,11 @@
 <!-- use ejs-mate /views/boilerplate layout -->
-<% layout("layouts/boilerplate") %>
+<% layout("layouts/boilerplate") %> <% if (result) { %>
+<!-- trying to inject variable directly to js file -->
+<!-- <script>
+  const resultExport = "<%- JSON.stringify(result) %>";
+  console.log(resultExport);
+</script> -->
+<% } %>
 <main>
   <h1>Showing all libraries</h1>
   <div class="columnContainer">
@@ -7,7 +13,13 @@
     <div class="columnContent">
       <img src="<%= libs.image  %> " alt="" class="indexImage" />
       <div>
-        <span class="indexTitle"><%= libs.name %></span>
+        <!-- <span class="indexTitle"><%= libs.name %></span> -->
+        <a
+          href="/libraries/<%= libs._id %>"
+          class="indexTitle"
+          id="<%= libs.id %>"
+          ><%= libs.name %>
+        </a>
         <ul class="indexInfo">
           <li><%= libs.description %></li>
           <li><%= libs.location %></li>
