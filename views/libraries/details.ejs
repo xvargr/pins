@@ -2,14 +2,14 @@
 <% layout("layouts/boilerplate") %>
 <main>
   <h1><%= result.name %></h1>
-  <img src="<%= result.image %> " class="detailsImage" />
-  <ul>
-    <li>Description: <%= result.description %></li>
-    <li>Location: <%= result.location %></li>
-    <li>Fee: $<%= result.fee %></li>
-  </ul>
-  <div>
-    <a href="/libraries">&lt;-- Back</a>
-    <a href="/libraries/<%= result._id %>/edit">Edit</a>
+  <div class="detailsContainer">
+    <img src="<%= result.image %> " class="detailsImage" />
+    <div>Description: <%= result.description %></div>
+    <div>Location: <%= result.location %></div>
+    <div class="price">$<%= result.fee %></div>
+    <div class="buttonContainer">
+      <a class="anchorButton" href="/libraries">Back</a>
+      <a class="anchorButton" href="/libraries/<%= result._id %>/edit">Edit</a>
+    </div>
   </div>
 </main>

@@ -97,3 +97,15 @@ app.delete("/libraries/:id", async function (req, res) {
 //   await lib.save(); //wait for this to finish
 //   res.send(lib);
 // }); //create async function and create a new test library
+
+app.get("/error", function () {
+  ejo.lop();
+});
+
+app.use(function (err, req, res, next) {
+  console.log("EEEEERRRRROOOOORRRRR!!!");
+  console.log("EEEEERRRRROOOOORRRRR!!!");
+  console.log("EEEEERRRRROOOOORRRRR!!!");
+  console.log(err);
+  next(err); //passing anything to next will make the current req an error and skip any non error handling middleware functions
+}); //defining an error handler which replaces the default handler, this will run if there are any errors on our routes, must be put last in the chain of app.use
