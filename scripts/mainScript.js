@@ -17,13 +17,37 @@ function navSlide() {
 // tried to use event delegation but this turned out to be easier
 // massive problem trying to get data like the specific link of each card
 //-// after completing this I discovered that you can directly inject
-//-// variables into the js file on teh page
+//-// variables into the js file on the page
+
+// old cardLink that uses id as variable
+// function cardLink() {
+//   if (
+//     window.location.pathname === "/libraries" ||
+//     window.location.pathname === "/libraries/"
+//   ) {
+//     const indexContainer = document.querySelector(".columnContainer");
+//     console.log(indexContainer);
+//     for (let card of indexContainer.children) {
+//       console.log(typeof card);
+//       card.addEventListener("click", function (e) {
+//         window.location = `/libraries/${card.children[1].firstElementChild.id}`;
+//       });
+//     }
+//   }
+// }
+
+// new cardLink which uses resultExport variable passed in object
 function cardLink() {
-  if (window.location.pathname === "/libraries") {
-    const indexContainer = document.querySelector(".columnContainer");
-    for (let card of indexContainer.children) {
-      card.addEventListener("click", function (e) {
-        window.location = `/libraries/${card.children[1].firstElementChild.id}`;
+  if (
+    //if current page are one of these;
+    window.location.pathname === "/libraries" ||
+    window.location.pathname === "/libraries/"
+  ) {
+    const columnContent = document.getElementsByClassName("columnContent"); //select content container
+    for (let card of columnContent) {
+      card.addEventListener("click", function () {
+        let index = Array.from(columnContent).indexOf(card); //make array from columnContent, then get the current index of card
+        window.location = `/libraries/${resultExport[index]._id}`; //set the event listener link to the id of that index from imported data object
       });
     }
   }
