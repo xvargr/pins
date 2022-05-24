@@ -3,7 +3,12 @@
 <main>
   <h1>Report new library</h1>
 
-  <form action="/libraries" method="post">
+  <form
+    action="/libraries"
+    class="editForm"
+    method="post"
+    onsubmit="return formValidation()"
+  >
     <div>
       <label for="name">Name:</label>
       <input type="text" name="lib[name]" id="name" />
@@ -17,15 +22,22 @@
       <input type="text" name="lib[location]" id="location" />
     </div>
     <!-- <div>
-          <label for="location">Location:</label>
-          <select name="lib[location]" id="location">
-            <option value="" disabled>--Select location--</option>
-          </select>
-        </div> -->
+      <label for="location">Location:</label>
+      <select name="lib[location]" id="location">
+        <option value="" disabled>--Select location--</option>
+      </select>
+    </div> -->
     <div>
       <label for="fee">Fee:</label>
       <input type="number" name="lib[fee]" id="fee" />
     </div>
-    <div><button>Create new library</button> <a href="/libraries">Back</a></div>
+    <div>
+      <label for="file">Upload image</label>
+      <input type="file" name="lib.img" id="file" />
+    </div>
+    <div>
+      <button>Create new library</button>
+      <a href="/libraries" class="anchorButton">Back</a>
+    </div>
   </form>
 </main>

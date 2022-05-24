@@ -8,8 +8,14 @@ function navSlide() {
   // add event to the burger which toggles visibility of menus
   burger.addEventListener("click", function () {
     nav.classList.toggle("mobileHeaderItemsActive");
-    mainHeader.classList.toggle("headerHidden");
-    mainTitle.classList.toggle("titleHidden");
+    if (
+      //this only needs to run on the homepage, no other page has a main banner
+      window.location.pathname === "/libraries" ||
+      window.location.pathname === "/libraries/"
+    ) {
+      mainHeader.classList.toggle("headerHidden");
+      mainTitle.classList.toggle("titleHidden");
+    }
   }); //toggle navbar menu
 }
 
@@ -53,6 +59,42 @@ function cardLink() {
   }
 }
 
+// client-side form validation
+// runs when form is submitted, returns false if validation failed, true if successful
+function formValidation() {
+  if (
+    window.location.pathname === "/libraries/new" ||
+    window.location.pathname === "/libraries/edit"
+  ) {
+    // selecting form elements
+    const name = document.querySelector("#name");
+    const description = document.querySelector("#description");
+    const location = document.querySelector("#location");
+    const fee = document.querySelector("#fee");
+    const file = document.querySelector("#file");
+    // const fields = [name, description, location, fee, file];
+
+    function fieldOK(field) {
+      //if field passes validation
+      console.log(`the ${field.id} field passed validation`);
+      field.classList.add("formValidationPassed");
+      // field.style.borderColor = "red";
+    }
+    function fieldErr(field) {
+      //if field fails validation
+      console.log(`the ${field.id} field failed validation`);
+      field.classList.add("formValidationFailed");
+    }
+
+    //checking fields
+    if (!name.value) {
+      fieldErr(name);
+      return false;
+    }
+  }
+}
+
+// run these functions on every request
 function app() {
   navSlide();
   cardLink();

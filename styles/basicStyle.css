@@ -246,6 +246,18 @@ button:hover,
   color: black;
   border-radius: 0.5rem;
   border-style: none;
+  border: 2px solid transparent;
+  transition: background-color 0.2s ease-in;
+}
+.editForm input:hover {
+  background-color: rgb(255, 255, 255);
+}
+/* I think this is a very good styling method, easily applied to other forms */
+.editForm .formValidationFailed {
+  border-color: rgb(221, 68, 68);
+}
+.editForm .formValidationPassed {
+  border-color: rgb(88, 192, 88);
 }
 
 /* navbar */
