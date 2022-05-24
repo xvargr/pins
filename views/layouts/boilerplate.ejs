@@ -17,7 +17,7 @@
     <title>Document</title>
   </head>
   <body>
-    <% if(req.path === "/libraries") {%>
+    <% if(req.path === "/libraries" || req.path === "/libraries/") {%>
     <!-- if the path is /libraries, then; -->
     <%- include("../partials/banner") %>
     <!-- banner here-->
