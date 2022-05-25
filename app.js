@@ -18,6 +18,8 @@ const mongoose = require("mongoose"); //import mongoose module to work with mong
 
 const Library = require("./models/libraries"); //import library model
 
+const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
+
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -58,36 +60,65 @@ app.get("/libraries/new", function (req, res) {
   res.render("libraries/new", { req });
 }); //new form route for to create libraries
 
-app.get("/libraries/:id", async function (req, res) {
-  const { id } = req.params; //destructure req.params to get id
-  const result = await Library.findById(id);
-  res.render("libraries/details", { result, req });
-}); //details route for specific libraries
+app.get(
+  "/libraries/:id",
+  errorWrapper(async function (req, res) {
+    const { id } = req.params; //destructure req.params to get id
+    const result = await Library.findById(id);
+    res.render("libraries/details", { result, req });
+  })
+); //details route for specific libraries
 
-app.get("/libraries/:id/edit", async function (req, res) {
-  const { id } = req.params;
-  const result = await Library.findById(id);
-  res.render("libraries/edit", { result, req });
-}); //serve edit form
+app.get(
+  "/libraries/:id/edit",
+  errorWrapper(async function (req, res) {
+    const { id } = req.params;
+    const result = await Library.findById(id);
+    res.render("libraries/edit", { result, req });
+  })
+); //serve edit form
 
-app.post("/libraries", async function (req, res) {
-  //res.send(req.body); //by default, req.body is empty, it needs to be parsed
-  const lib = new Library(req.body.lib);
-  await lib.save();
-  res.redirect(`/libraries/${lib._id}`);
-}); // post req new library
+app.post(
+  "/libraries",
+  errorWrapper(async function (req, res, next) {
+    // the error wrapper is used to wrap this function in a try catch to catch any async errors
+    //res.send(req.body); //by default, req.body is empty, it needs to be parsed
+    const lib = new Library(req.body.lib);
 
-app.put("/libraries/:id", async function (req, res) {
-  const { id } = req.params;
-  await Library.findByIdAndUpdate(id, { ...req.body.lib }); //spread operator pass all elements of iterable lib
-  res.redirect(`/libraries/${id}`);
-}); //update route
+    // This try catch is for catching async errors // replaced with wrapper
+    // try {
+    //   await lib.save();
+    //   res.redirect(`/libraries/${lib._id}`);
+    // } catch (e) {
+    //   next(e);
+    // }
 
-app.delete("/libraries/:id", async function (req, res) {
-  const { id } = req.params;
-  await Library.findByIdAndDelete(id);
-  res.redirect("/libraries");
-}); //delete route
+    await lib.save();
+    res.redirect(`/libraries/${lib._id}`);
+  })
+); // post req new library
+
+app.put(
+  "/libraries/:id",
+  errorWrapper(async function (req, res) {
+    const { id } = req.params;
+    await Library.findByIdAndUpdate(
+      id,
+      { ...req.body.lib },
+      { runValidators: true }
+    ); //spread operator pass all elements of iterable lib
+    res.redirect(`/libraries/${id}`);
+  })
+); //update route
+
+app.delete(
+  "/libraries/:id",
+  errorWrapper(async function (req, res) {
+    const { id } = req.params;
+    await Library.findByIdAndDelete(id);
+    res.redirect("/libraries");
+  })
+); //delete route
 
 // app.get("/newlibrary", async function (req, res) {
 //   const lib = new Library({
@@ -98,14 +129,14 @@ app.delete("/libraries/:id", async function (req, res) {
 //   res.send(lib);
 // }); //create async function and create a new test library
 
-app.get("/error", function () {
-  ejo.lop();
+// Custom Error Handler
+app.use(function (err, req, res, next) {
+  console.log("HANDLED ERROR");
+  next(err);
 });
 
-app.use(function (err, req, res, next) {
-  console.log("EEEEERRRRROOOOORRRRR!!!");
-  console.log("EEEEERRRRROOOOORRRRR!!!");
-  console.log("EEEEERRRRROOOOORRRRR!!!");
-  console.log(err);
-  next(err); //passing anything to next will make the current req an error and skip any non error handling middleware functions
-}); //defining an error handler which replaces the default handler, this will run if there are any errors on our routes, must be put last in the chain of app.use
+// app.use(function (err, req, res, next) {
+//   console.log("ERROR!!!");
+//   console.log(err);
+//   next(err); //passing anything to next will make the current req an error and skip any non error handling middleware functions
+// }); //defining an error handler which replaces the default handler, this will run if there are any errors on our routes, must be put last in the chain of app.use

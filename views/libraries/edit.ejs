@@ -7,10 +7,17 @@
     action="/libraries/<%= result._id %>?_method=put"
     method="post"
     class="editForm"
+    onsubmit="return formValidation()"
   >
     <div>
       <label for="name">Name:</label>
-      <input type="text" name="lib[name]" id="name" value="<%=result.name%>" />
+      <input
+        type="text"
+        name="lib[name]"
+        id="name"
+        autocomplete="off"
+        value="<%=result.name%>"
+      />
     </div>
     <div>
       <label for="description">Description:</label>
@@ -18,6 +25,7 @@
         type="text"
         name="lib[description]"
         id="description"
+        autocomplete="off"
         value="<%=result.description%>"
       />
     </div>
@@ -27,6 +35,7 @@
         type="text"
         name="lib[location]"
         id="location"
+        autocomplete="off"
         value="<%=result.location%>"
       />
     </div>
@@ -42,10 +51,16 @@
         type="number"
         name="lib[fee]"
         id="fee"
+        autocomplete="off"
         value="<%=result.fee%>"
         step="0.01"
       />
     </div>
+    <!-- file section temporarily removed while figuring out how to store it -->
+    <!-- <div>
+      <label for="file">Upload image:</label>
+      <input type="file" name="lib.img" id="file" />
+    </div> -->
     <button>Submit</button>
   </form>
 
