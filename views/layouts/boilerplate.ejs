@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-    <!-- CSS -->
-    <base href="/" />
-    <link rel="stylesheet" type="text/css" href="styles/basicStyle.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <% if(req.path === "/libraries" || req.path === "/libraries/") {%>
-    <!-- if the path is /libraries, then; -->
-    <%- include("../partials/banner") %>
-    <!-- banner here-->
-    <% } %> <%- include("../partials/navbar") %>
-    <!-- navbar here -->
-    <%- body %>
-    <!-- body here -->
 
-    <footer class="mainFooter">
-      <span class="footerLogo">&copy;/Libs</span>
-    </footer>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+  <!-- CSS -->
+  <base href="/" />
+  <link rel="stylesheet" type="text/css" href="styles/basicStyle.css" />
+  <% if(typeof err !== "undefined") {%>
+  <link rel="stylesheet" href="styles/errorStyle.css">
+  <% } %>
 
-    <script src="scripts/mainScript.js"></script>
-  </body>
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+  <title>Document</title>
+</head>
+
+<body>
+  <% if(req.path === "/libraries" || req.path==="/libraries/") {%>
+  <%- include("../partials/banner") %>
+  <% }  %>
+  <!-- banner here-->
+  <%- include("../partials/navbar") %>
+  <!-- navbar here -->
+  <%- body %>
+  <!-- body here -->
+
+  <footer class="mainFooter">
+    <span class="footerLogo">&copy;/Libs</span>
+  </footer>
+
+  <script src="scripts/mainScript.js"></script>
+</body>
+
 </html>

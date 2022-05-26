@@ -19,6 +19,7 @@ const mongoose = require("mongoose"); //import mongoose module to work with mong
 const Library = require("./models/libraries"); //import library model
 
 const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
+const ExpressError = require("./utils/ExpressError"); //import custom error class
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
@@ -83,6 +84,7 @@ app.post(
   errorWrapper(async function (req, res, next) {
     // the error wrapper is used to wrap this function in a try catch to catch any async errors
     //res.send(req.body); //by default, req.body is empty, it needs to be parsed
+    if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error
     const lib = new Library(req.body.lib);
 
     // This try catch is for catching async errors // replaced with wrapper
@@ -129,10 +131,21 @@ app.delete(
 //   res.send(lib);
 // }); //create async function and create a new test library
 
+// 404 catch
+app.all("*", function (req, res, next) {
+  console.log("!---> 404 triggered");
+  next(new ExpressError("Page Not Found", 404));
+});
+
 // Custom Error Handler
 app.use(function (err, req, res, next) {
-  console.log("HANDLED ERROR");
-  next(err);
+  console.log("!---> handled error");
+  console.log(err);
+  const { message = "Something went wrong", status = 500 } = err; //destructure msg and status from err, passed from next
+  // res.status(status).send(message);
+  console.log(status, message);
+  res.render("error", { req, err, message, status });
+  // next(err);
 });
 
 // app.use(function (err, req, res, next) {
