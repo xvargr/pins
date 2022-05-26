@@ -1,0 +1,55 @@
+body {
+  justify-content: space-between;
+}
+
+main {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+a {
+  color: white;
+}
+
+.navbar {
+  background-color: rgb(180, 44, 44);
+}
+
+.mobileHeaderItems {
+  background-color: rgb(150, 43, 43);
+}
+
+.mainFooter {
+  margin: 0;
+  background-color: rgb(150, 43, 43);
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(180, 44, 44);
+  max-width: 40rem;
+  width: 80%;
+  min-height: 20rem;
+  height: 50%;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 3px 3px 20px 1px black;
+  color: white;
+}
+
+.errorCode {
+  font-size: 3rem;
+}
+
+.errorMessage {
+  font-size: 1rem;
+}
+
+.errorDivider {
+  width: 100%;
+  height: 0.2rem;
+  background-color: rgb(56, 56, 56);
+  margin: 0.5rem 0;
+}
