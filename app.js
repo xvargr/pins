@@ -21,6 +21,9 @@ const Library = require("./models/libraries"); //import library model
 const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
 const ExpressError = require("./utils/ExpressError"); //import custom error class
 
+// const Joi = require("joi"); // import joi javascript validator module // no longer required in this file as schema definition moved to own file
+const { joiLibSchema } = require("./schemas/schemas");
+
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -44,6 +47,31 @@ app.listen(port, function () {
   console.log("---> App started");
   console.log(`---> Listening on port ${port}`);
 }); //express start server
+
+function joiValidate(req, res, next) {
+  // moved to own file
+  // const joiSchema = Joi.object({
+  //   //define the joi schema here
+  //   lib: Joi.object({
+  //     //expect a lib object with these keys
+  //     name: Joi.string().required(),
+  //     description: Joi.string().required(),
+  //     // image: ,
+  //     fee: Joi.number().required().min(0),
+  //     location: Joi.string().required(),
+  //   }).required(), //the lib object is required
+  // });
+
+  const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
+
+  // throw error if error is defined
+  if (response) {
+    const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
+    throw new ExpressError(message, 400);
+  } else {
+    next(); //move on to the route handler
+  }
+}
 
 // TODO: streamline requests with more advanced express router to
 // reduce duplicate code
@@ -81,10 +109,32 @@ app.get(
 
 app.post(
   "/libraries",
+  joiValidate,
   errorWrapper(async function (req, res, next) {
     // the error wrapper is used to wrap this function in a try catch to catch any async errors
     //res.send(req.body); //by default, req.body is empty, it needs to be parsed
-    if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error
+    // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
+
+    // joi validation, moved on to its own function
+    // const joiSchema = Joi.object({
+    //   //define the joi schema here
+    //   lib: Joi.object({
+    //     //expect a lib object with these keys
+    //     name: Joi.string().required(),
+    //     description: Joi.string().required(),
+    //     // image: ,
+    //     fee: Joi.number().required().min(0),
+    //     location: Joi.string().required(),
+    //   }).required(), //the lib object is required
+    // });
+
+    // const response = joiSchema.validate(req.body); //points joi to validate req.body based on joiSchema
+
+    // if (response.error) {
+    //   const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
+    //   throw new ExpressError(message, 400);
+    // }
+
     const lib = new Library(req.body.lib);
 
     // This try catch is for catching async errors // replaced with wrapper
@@ -102,6 +152,7 @@ app.post(
 
 app.put(
   "/libraries/:id",
+  joiValidate,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndUpdate(
@@ -139,7 +190,7 @@ app.all("*", function (req, res, next) {
 
 // Custom Error Handler
 app.use(function (err, req, res, next) {
-  console.log("!---> handled error");
+  console.log("!--> handled error");
   console.log(err);
   const { message = "Something went wrong", status = 500 } = err; //destructure msg and status from err, passed from next
   // res.status(status).send(message);
