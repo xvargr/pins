@@ -2,14 +2,43 @@
 <% layout("layouts/boilerplate") %>
 <main>
   <h1><%= result.name %></h1>
-  <div class="detailsContainer">
-    <img src="<%= result.image %> " class="detailsImage" />
-    <div>Description: <%= result.description %></div>
-    <div>Location: <%= result.location %></div>
-    <div class="price">$<%= result.fee %></div>
-    <div class="buttonContainer">
-      <a class="anchorButton" href="/libraries">Back</a>
-      <a class="anchorButton" href="/libraries/<%= result._id %>/edit">Edit</a>
+  <div class="mainDetailsContainer">
+
+    <div class="libDetailsContainer">
+      <img src="<%= result.image %> " class="detailsImage" />
+      <div>Description: <%= result.description %></div>
+      <div>Location: <%= result.location %></div>
+      <div class="price">$<%= result.fee %></div>
+      <div class="buttonContainer">
+        <a class="anchorButton" href="/libraries">Back</a>
+        <a class="anchorButton" href="/libraries/<%= result._id %>/edit">Edit</a>
+      </div>
     </div>
+
+    <div class="reviewsContainer">
+      <div class="reviewsTitle">Reviews</div>
+      <div class="reviewsList">
+        <% for (let i = 0; i < 40; i++) {  %>
+        <div class="reviewItem">
+          <div><span class="reviewer">review title</span><span class="rating">rating</span></div>
+          <div>review text</div>
+        </div>
+        <% } %>
+      </div>
+      <form action="">
+        <div>Leave a review</div>
+        <textarea name="" id=""></textarea>
+        <!-- <input type="text" name="review" id="review"> -->
+        <div>
+          <% for (let i = 1; i <= 5; i++) { %>
+          <label>
+            <input type="radio" id=<%= i %> name="rating"><%= i %>
+          </label>
+          <% } %>
+        </div>
+        <button>Submit review</button>
+      </form>
+    </div>
+
   </div>
 </main>
