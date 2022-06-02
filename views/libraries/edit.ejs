@@ -3,41 +3,18 @@
 <main>
   <h1>Editing <%= result.name %></h1>
 
-  <form
-    action="/libraries/<%= result._id %>?_method=put"
-    method="post"
-    class="editForm"
-    onsubmit="return formValidation()"
-  >
+  <form action="/libraries/<%= result._id %>?_method=put" method="post" class="editForm" onsubmit="return validateForm.editForm()">
     <div>
       <label for="name">Name:</label>
-      <input
-        type="text"
-        name="lib[name]"
-        id="name"
-        autocomplete="off"
-        value="<%=result.name%>"
-      />
+      <input type="text" name="lib[name]" id="name" autocomplete="off" value="<%=result.name%>" />
     </div>
     <div>
       <label for="description">Description:</label>
-      <input
-        type="text"
-        name="lib[description]"
-        id="description"
-        autocomplete="off"
-        value="<%=result.description%>"
-      />
+      <input type="text" name="lib[description]" id="description" autocomplete="off" value="<%=result.description%>" />
     </div>
     <div>
       <label for="location">Location:</label>
-      <input
-        type="text"
-        name="lib[location]"
-        id="location"
-        autocomplete="off"
-        value="<%=result.location%>"
-      />
+      <input type="text" name="lib[location]" id="location" autocomplete="off" value="<%=result.location%>" />
     </div>
     <!-- <div>
           <label for="location">Location:</label>
@@ -47,14 +24,7 @@
         </div> -->
     <div>
       <label for="fee">Fee:</label>
-      <input
-        type="number"
-        name="lib[fee]"
-        id="fee"
-        autocomplete="off"
-        value="<%=result.fee%>"
-        step="0.01"
-      />
+      <input type="number" name="lib[fee]" id="fee" autocomplete="off" value="<%=result.fee%>" step="0.01" />
     </div>
     <!-- file section temporarily removed while figuring out how to store it -->
     <!-- <div>

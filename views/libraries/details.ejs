@@ -25,14 +25,14 @@
         </div>
         <% } %>
       </div>
-      <form action="">
+      <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="event.preventDefault(); return validateForm.reviewForm()">
         <div>Leave a review</div>
-        <textarea name="" id=""></textarea>
+        <textarea name="review[text]" id="review"></textarea>
         <!-- <input type="text" name="review" id="review"> -->
         <div>
           <% for (let i = 1; i <= 5; i++) { %>
-          <label>
-            <input type="radio" id=<%= i %> name="rating"><%= i %>
+          <label id="ratingLabel">
+            <input type="radio" value="<%= i %>" name="review[rating]"><%= i %>
           </label>
           <% } %>
         </div>

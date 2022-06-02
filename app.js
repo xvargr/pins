@@ -16,13 +16,16 @@ app.use(formMethod("_method")); //defining methodOverride query value
 
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 
-const Library = require("./models/libraries"); //import library model
+//import schema models
+const Library = require("./models/libraries");
+const Review = require("./models/reviews");
 
 const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
 const ExpressError = require("./utils/ExpressError"); //import custom error class
 
 // const Joi = require("joi"); // import joi javascript validator module // no longer required in this file as schema definition moved to own file
 const { joiLibSchema } = require("./schemas/schemas");
+const { populate } = require("./models/libraries");
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
@@ -62,13 +65,17 @@ function joiValidate(req, res, next) {
   //   }).required(), //the lib object is required
   // });
 
+  console.log("---> JOI validation is running");
   const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
-
-  // throw error if error is defined
-  if (response) {
+  // throw error if there is an error validating
+  if (response.error) {
+    // console.log("!--> JOI validation failed");
+    // console.log(response);
     const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
     throw new ExpressError(message, 400);
   } else {
+    // console.log("---> JOI validation passed");
+    // console.log(response);
     next(); //move on to the route handler
   }
 }
@@ -94,6 +101,7 @@ app.get(
   errorWrapper(async function (req, res) {
     const { id } = req.params; //destructure req.params to get id
     const result = await Library.findById(id);
+    console.log(result);
     res.render("libraries/details", { result, req });
   })
 ); //details route for specific libraries
@@ -172,6 +180,15 @@ app.delete(
     res.redirect("/libraries");
   })
 ); //delete route
+
+app.post("/libraries/:id/reviews", async function (req, res) {
+  const library = await Library.findById(req.params.id);
+  const review = new Review(req.body.review);
+  library.reviews.push(review); // push newly made review into the library doc
+  await review.save();
+  await library.save();
+  res.redirect(`/libraries/${req.params.id}`);
+});
 
 // app.get("/newlibrary", async function (req, res) {
 //   const lib = new Library({

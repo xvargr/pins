@@ -58,55 +58,73 @@ function cardLink() {
 
 // client-side form validation
 // runs when form is submitted, returns false if validation failed, true if successful
-function formValidation() {
-  // console.log("form validator running");
-
-  // selecting form elements
-  const name = document.querySelector("#name");
-  const description = document.querySelector("#description");
-  const location = document.querySelector("#location");
-  const fee = document.querySelector("#fee");
-  // file section temporarily removed while figuring out how to store it
-  // const file = document.querySelector("#file");
-  // const fields = [name, description, location, fee, file];
-  const fields = [name, description, location, fee];
-  let formComplete = true;
-
-  function fieldOK(field) {
+const validateForm = {
+  // MODULAR apply classes to indicate valid and invalid fields
+  fieldOK(field) {
     //if field passes validation
-    console.log(`${field.id} field passed validation`);
+    // console.log(`${field.id} field passed validation`);
     field.className = "";
     field.classList.add("formValidationPassed");
-  }
-  function fieldErr(field) {
+  },
+  fieldErr(field) {
     //if field fails validation
-    console.log(`${field.id} field failed validation`);
+    // console.log(`${field.id} field failed validation`);
     field.className = "";
     field.classList.add("formValidationFailed");
     field.placeholder = "This field is required!";
-  }
-
-  // new field check, iterative
-  for (let field of fields) {
-    // console.log(field);
-    if (!field.value) {
-      // if the field is empty
-      fieldErr(field);
-      formComplete = false;
-    } else {
-      fieldOK(field);
+  },
+  // MODULAR check if required fields are empty
+  isRequired(fields) {
+    let formComplete = true;
+    // new field check, iterative
+    for (let field of fields) {
+      // console.log(field);
+      if (!field.value) {
+        // if the field is empty
+        this.fieldErr(field);
+        formComplete = false;
+      } else {
+        this.fieldOK(field);
+      }
     }
-  }
-  if (formComplete === false) {
-    return false;
-  }
-
-  //legacy fields checks
-  // if (!name.value) {
-  //   fieldErr(name);
-  //   return false;
-  // }
-}
+    return formComplete;
+  },
+  // Specific edit form validation
+  editForm() {
+    console.log("---> client side edit form validation running");
+    // selecting form elements
+    const name = document.querySelector("#name");
+    const description = document.querySelector("#description");
+    const location = document.querySelector("#location");
+    const fee = document.querySelector("#fee");
+    // file section temporarily removed while figuring out how to store it
+    // const file = document.querySelector("#file");
+    // const fields = [name, description, location, fee, file];
+    const fields = [name, description, location, fee];
+    const formComplete = this.isRequired(fields);
+    if (formComplete === false) {
+      console.log("---> client side form validation failed");
+      return false;
+    }
+    console.log("---> client side edit validation passed");
+  },
+  // review form validation
+  //
+  //  NOT COMPLETE!!!
+  //
+  reviewForm() {
+    const review = document.querySelector("#review");
+    const rating = document.querySelector("[name='review[rating]']:checked");
+    const fields = [review, rating];
+    const formComplete = this.isRequired(fields);
+    if (formComplete === false) {
+      console.log("---> client side form validation failed");
+      return false;
+    }
+    console.log("---> client side edit validation passed");
+  },
+  // IDEA - make a function which accepts args that are the names, id, class of the elements that needs to be verified and do so
+};
 
 // run these functions on every request
 function app() {
