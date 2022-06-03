@@ -24,7 +24,7 @@ const errorWrapper = require("./utils/errorWrapper"); //import error wrapper fun
 const ExpressError = require("./utils/ExpressError"); //import custom error class
 
 // const Joi = require("joi"); // import joi javascript validator module // no longer required in this file as schema definition moved to own file
-const { joiLibSchema } = require("./schemas/schemas");
+const { joiLibSchema, joiRevSchema } = require("./schemas/schemas");
 const { populate } = require("./models/libraries");
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
@@ -51,7 +51,7 @@ app.listen(port, function () {
   console.log(`---> Listening on port ${port}`);
 }); //express start server
 
-function joiValidate(req, res, next) {
+function joiLibValidate(req, res, next) {
   // moved to own file
   // const joiSchema = Joi.object({
   //   //define the joi schema here
@@ -65,17 +65,34 @@ function joiValidate(req, res, next) {
   //   }).required(), //the lib object is required
   // });
 
-  console.log("---> JOI validation is running");
+  console.log("---> JOI library validation is running");
   const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
   // throw error if there is an error validating
   if (response.error) {
-    // console.log("!--> JOI validation failed");
-    // console.log(response);
+    console.log("!--> JOI library validation failed");
+    console.log(response);
     const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
     throw new ExpressError(message, 400);
   } else {
-    // console.log("---> JOI validation passed");
-    // console.log(response);
+    console.log("---> JOI library validation passed");
+    console.log(response);
+    next(); //move on to the route handler
+  }
+}
+
+function joiRevValidate(req, res, next) {
+  console.log("---> JOI review validation is running");
+  const response = joiRevSchema.validate(req.body);
+  console.log(req.body);
+  console.log(response);
+  if (response.error) {
+    console.log("!--> JOI review validation failed");
+    console.log(response);
+    const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
+    throw new ExpressError(message, 400);
+  } else {
+    console.log("---> JOI review validation passed");
+    console.log(response);
     next(); //move on to the route handler
   }
 }
@@ -101,7 +118,7 @@ app.get(
   errorWrapper(async function (req, res) {
     const { id } = req.params; //destructure req.params to get id
     const result = await Library.findById(id);
-    console.log(result);
+    console.log(result); // TEMPORARY!!!!
     res.render("libraries/details", { result, req });
   })
 ); //details route for specific libraries
@@ -117,7 +134,7 @@ app.get(
 
 app.post(
   "/libraries",
-  joiValidate,
+  joiLibValidate,
   errorWrapper(async function (req, res, next) {
     // the error wrapper is used to wrap this function in a try catch to catch any async errors
     //res.send(req.body); //by default, req.body is empty, it needs to be parsed
@@ -160,7 +177,7 @@ app.post(
 
 app.put(
   "/libraries/:id",
-  joiValidate,
+  joiLibValidate,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndUpdate(
@@ -181,7 +198,7 @@ app.delete(
   })
 ); //delete route
 
-app.post("/libraries/:id/reviews", async function (req, res) {
+app.post("/libraries/:id/reviews", joiRevValidate, async function (req, res) {
   const library = await Library.findById(req.params.id);
   const review = new Review(req.body.review);
   library.reviews.push(review); // push newly made review into the library doc
