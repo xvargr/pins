@@ -20,19 +20,19 @@
       <div class="reviewsList">
         <% for (let i = 0; i < 40; i++) {  %>
         <div class="reviewItem">
-          <div><span class="reviewer">review title</span><span class="rating">rating</span></div>
+          <div><span class="reviewer">User</span><span class="rating">rating</span></div>
           <div>review text</div>
         </div>
         <% } %>
       </div>
-      <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="event.preventDefault(); return validateForm.reviewForm()">
+      <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="return validateForm.reviewForm()">
         <div>Leave a review</div>
         <textarea name="review[text]" id="review"></textarea>
         <!-- <input type="text" name="review" id="review"> -->
         <div>
           <% for (let i = 1; i <= 5; i++) { %>
           <label id="ratingLabel">
-            <input type="radio" value="<%= i %>" name="review[rating]"><%= i %>
+            <input type="radio" value="<%= i %>" name="review[rating]" <% if(i===3){%> checked <% } %>><%= i %>
           </label>
           <% } %>
         </div>

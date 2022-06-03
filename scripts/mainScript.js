@@ -109,9 +109,6 @@ const validateForm = {
     console.log("---> client side edit validation passed");
   },
   // review form validation
-  //
-  //  NOT COMPLETE!!!
-  //
   reviewForm() {
     const review = document.querySelector("#review");
     const rating = document.querySelector("[name='review[rating]']:checked");
