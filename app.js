@@ -25,7 +25,8 @@ const ExpressError = require("./utils/ExpressError"); //import custom error clas
 
 // const Joi = require("joi"); // import joi javascript validator module // no longer required in this file as schema definition moved to own file
 const { joiLibSchema, joiRevSchema } = require("./schemas/schemas");
-const { populate } = require("./models/libraries");
+const res = require("express/lib/response");
+// const { populate } = require("./models/libraries"); // populate not used right now
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
@@ -117,8 +118,8 @@ app.get(
   "/libraries/:id",
   errorWrapper(async function (req, res) {
     const { id } = req.params; //destructure req.params to get id
-    const result = await Library.findById(id);
-    console.log(result); // TEMPORARY!!!!
+    const result = await Library.findById(id).populate("reviews");
+    // console.log(result.reviews);
     res.render("libraries/details", { result, req });
   })
 ); //details route for specific libraries
@@ -135,7 +136,7 @@ app.get(
 app.post(
   "/libraries",
   joiLibValidate,
-  errorWrapper(async function (req, res, next) {
+  errorWrapper(async function (req, res) {
     // the error wrapper is used to wrap this function in a try catch to catch any async errors
     //res.send(req.body); //by default, req.body is empty, it needs to be parsed
     // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
@@ -198,14 +199,36 @@ app.delete(
   })
 ); //delete route
 
-app.post("/libraries/:id/reviews", joiRevValidate, async function (req, res) {
-  const library = await Library.findById(req.params.id);
-  const review = new Review(req.body.review);
-  library.reviews.push(review); // push newly made review into the library doc
-  await review.save();
-  await library.save();
-  res.redirect(`/libraries/${req.params.id}`);
-});
+// review post route
+// changes needed to account for rating an username
+app.post(
+  "/libraries/:id/reviews",
+  joiRevValidate,
+  errorWrapper(async function (req, res) {
+    const library = await Library.findById(req.params.id);
+    const review = new Review(req.body.review);
+    library.reviews.push(review); // push newly made review into the library doc
+    await review.save();
+    await library.save();
+    res.redirect(`/libraries/${req.params.id}`);
+  })
+);
+
+// review delete route
+app.delete(
+  "/libraries/:id/reviews/:reviewId",
+  errorWrapper(async function (req, res) {
+    const { id, reviewId } = req.params;
+    await Review.findByIdAndDelete(reviewId);
+    await Library.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // $pull will remove all instances of values that match reviews: reviewID
+    res.redirect(`/libraries/${id}`);
+  })
+);
+
+// review delete route // WIP TODO
+// app.put("/libraries/:id/reviews/:reviewId", async function () {
+//   res.send("rev delete route");
+// });
 
 // app.get("/newlibrary", async function (req, res) {
 //   const lib = new Library({
@@ -223,6 +246,7 @@ app.all("*", function (req, res, next) {
 });
 
 // Custom Error Handler
+// REMOVED NEXT !!!! IF PROBLEMS OCCUR THIS IS THE CAUSE !!!!
 app.use(function (err, req, res, next) {
   console.log("!--> handled error");
   console.log(err);

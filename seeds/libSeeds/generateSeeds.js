@@ -1,7 +1,7 @@
 //this will seed the database with randomly created test data
 
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
-const Library = require("../models/libraries"); //import library model
+const Library = require("../../models/libraries"); //import library model
 const seedName = require("./seedNames"); //import seedNames
 const cities = require("./cities"); //import cities data
 
@@ -44,6 +44,7 @@ async function seedDB() {
       image: "https://via.placeholder.com/650x450",
       fee: randomPrice(),
       location: `${pickOne(cities).city}, ${pickOne(cities).state}`,
+      // reviews: [],
     });
     await lib.save(); //save the new lib
   }
@@ -52,3 +53,4 @@ async function seedDB() {
 seedDB(); //run seedDB
 
 console.log("---> Database seeded!");
+// process.exit();
