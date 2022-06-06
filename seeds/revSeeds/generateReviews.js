@@ -1,4 +1,4 @@
-const { readFileSync, promises: fsPromises } = require("fs");
+const { readFileSync } = require("fs");
 
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 const Review = require("../../models/reviews"); //import reviews model
@@ -36,7 +36,7 @@ function syncReadFile(filename) {
 const adjectives = syncReadFile(adjectiveFile);
 const nouns = syncReadFile(nounFile);
 
-function makeUsername(adjective, noun) {
+function makeUsername(adjectives, nouns) {
   function pickOne(array) {
     return array[Math.floor(Math.random() * array.length)];
   } //function picks one of the index of an array on random
@@ -44,31 +44,25 @@ function makeUsername(adjective, noun) {
   return username;
 }
 
-// IN PROGRESS !!!
-async function seedReviews() {
-  // delete all reviews
-  await Review.deleteMany({});
-  // find all libraries
-  const libs = await Library.find({});
-  // for each library, make x amount of reviews
-  for (let lib of libs) {
-    console.log(lib.review);
-    // STEPS
-    // make username
-    // make review text
-    // make random rating 1-5
-    // make new review
-    for (let i; i < numOfReviews; i++) {
-      const review = new Review({
+// Main function
+async function generateReviews() {
+  const libraries = await Library.find({}); // create new library array from all libs
+  await Library.updateMany({}, { reviews: [] }); // clear all review fields
+  // create x num of reviews for each lib
+  for (const library of libraries) {
+    for (let i = 0; i < numOfReviews; i++) {
+      let review = new Review({
         user: makeUsername(adjectives, nouns),
         text: "I used to practice weaving with spaghetti three hours a day but stopped because I didn't want to die alone.",
         rating: Math.floor(Math.random() * 5 + 1),
       });
+      library.reviews.push(review); // push new review to current lib
+      await review.save();
     }
-    // push to lib doc
-    // save lib
-    // save review
+    await library.save();
   }
+  console.log("---> reviews seeded");
+  // console.log(await Rev.find({}));
 }
 
-seedReviews();
+generateReviews();
