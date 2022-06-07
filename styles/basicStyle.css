@@ -553,7 +553,7 @@ button:hover,
   font-weight: bold;
 }
 .rating {
-  color: yellow;
+  color: rgb(240, 240, 83);
 }
 
 .reviewsContainer > form {

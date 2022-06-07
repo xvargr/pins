@@ -53,19 +53,6 @@ app.listen(port, function () {
 }); //express start server
 
 function joiLibValidate(req, res, next) {
-  // moved to own file
-  // const joiSchema = Joi.object({
-  //   //define the joi schema here
-  //   lib: Joi.object({
-  //     //expect a lib object with these keys
-  //     name: Joi.string().required(),
-  //     description: Joi.string().required(),
-  //     // image: ,
-  //     fee: Joi.number().required().min(0),
-  //     location: Joi.string().required(),
-  //   }).required(), //the lib object is required
-  // });
-
   console.log("---> JOI library validation is running");
   const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
   // throw error if there is an error validating
@@ -100,7 +87,6 @@ function joiRevValidate(req, res, next) {
 
 // TODO: streamline requests with more advanced express router to
 // reduce duplicate code
-
 app.get("/libraries", async function (req, res) {
   const result = await Library.find({});
   res.render("libraries/index", { result, req });
@@ -140,37 +126,7 @@ app.post(
     // the error wrapper is used to wrap this function in a try catch to catch any async errors
     //res.send(req.body); //by default, req.body is empty, it needs to be parsed
     // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
-
-    // joi validation, moved on to its own function
-    // const joiSchema = Joi.object({
-    //   //define the joi schema here
-    //   lib: Joi.object({
-    //     //expect a lib object with these keys
-    //     name: Joi.string().required(),
-    //     description: Joi.string().required(),
-    //     // image: ,
-    //     fee: Joi.number().required().min(0),
-    //     location: Joi.string().required(),
-    //   }).required(), //the lib object is required
-    // });
-
-    // const response = joiSchema.validate(req.body); //points joi to validate req.body based on joiSchema
-
-    // if (response.error) {
-    //   const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
-    //   throw new ExpressError(message, 400);
-    // }
-
     const lib = new Library(req.body.lib);
-
-    // This try catch is for catching async errors // replaced with wrapper
-    // try {
-    //   await lib.save();
-    //   res.redirect(`/libraries/${lib._id}`);
-    // } catch (e) {
-    //   next(e);
-    // }
-
     await lib.save();
     res.redirect(`/libraries/${lib._id}`);
   })
@@ -246,7 +202,6 @@ app.all("*", function (req, res, next) {
 });
 
 // Custom Error Handler
-// REMOVED NEXT !!!! IF PROBLEMS OCCUR THIS IS THE CAUSE !!!!
 app.use(function (err, req, res, next) {
   console.log("!--> handled error");
   console.log(err);
@@ -256,9 +211,3 @@ app.use(function (err, req, res, next) {
   res.render("error", { req, err, message, status });
   // next(err);
 });
-
-// app.use(function (err, req, res, next) {
-//   console.log("ERROR!!!");
-//   console.log(err);
-//   next(err); //passing anything to next will make the current req an error and skip any non error handling middleware functions
-// }); //defining an error handler which replaces the default handler, this will run if there are any errors on our routes, must be put last in the chain of app.use
