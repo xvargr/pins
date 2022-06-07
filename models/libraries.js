@@ -1,6 +1,8 @@
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 const Schema = mongoose.Schema; //maps Schema to mongoose.Schema as a shortcut
+const Review = require("./reviews"); // import reviews schema
 
+// define the schema for new library document
 const LibrarySchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
@@ -16,6 +18,24 @@ const LibrarySchema = new Schema({
       ref: "Review",
     },
   ],
-}); //defining the schema for libraries
+});
+
+// post middleware, not clear how this works, perhaps this middleware runs post (after) findOneAndDelete was run on a library document
+LibrarySchema.post("findOneAndDelete", async function (doc) {
+  // more complicated query remove that doesn't need to reiterate
+  if (doc) {
+    // delete reviews that has their id in doc.reviews (query)
+    await Review.deleteMany({
+      _id: {
+        $in: doc.reviews,
+      },
+    });
+  }
+
+  // const reviews = doc.reviews;
+  // for (review of reviews) {
+  //   await Review.findByIdAndDelete(review._id);
+  // }
+});
 
 module.exports = mongoose.model("Library", LibrarySchema); //compile the library model from the schema and export it

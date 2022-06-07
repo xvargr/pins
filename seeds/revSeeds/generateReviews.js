@@ -4,8 +4,8 @@ const mongoose = require("mongoose"); //import mongoose module to work with mong
 const Review = require("../../models/reviews"); //import reviews model
 const Library = require("../../models/libraries"); //import library model
 
-const adjectiveFile = "../words/english-adjectives.txt";
-const nounFile = "../words/english-nouns.txt";
+const adjectiveFile = "../words/english-adjectives.txt"; // path is relative to the node console
+const nounFile = "../words/english-nouns.txt"; // todo make path absolute
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
