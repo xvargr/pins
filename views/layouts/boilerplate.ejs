@@ -24,11 +24,17 @@
 </head>
 
 <body>
-  <% if(req.path === "/libraries" || req.path==="/libraries/") {%>
+  <% if(req.path === "/") {%>
   <%- include("../partials/banner") %>
   <% }  %>
   <!-- banner here-->
   <%- include("../partials/navbar") %>
+  <!-- flash messages here -->
+  <!-- <%= success %> -->
+  <% if (success || error) { %>
+  <p>it is <%= success %></p>
+  <% } %>
+
   <!-- navbar here -->
   <%- body %>
   <!-- body here -->

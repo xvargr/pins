@@ -1,7 +1,9 @@
 // npm init
-
 const express = require("express"); //import the express npm module for easy server setup
 const app = express(); //mapping express to app
+const session = require("express-session"); // impost session module
+
+const flash = require("connect-flash"); // import flash for alert messages
 
 const path = require("path"); //import path npm module to work with folder structure easier
 
@@ -16,22 +18,27 @@ app.use(formMethod("_method")); //defining methodOverride query value
 
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 
-//import schema models
-const Library = require("./models/libraries");
-const Review = require("./models/reviews");
+// //import schema models
+// const Library = require("./models/libraries");
+// const Review = require("./models/reviews");
 
-const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
+// const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
 const ExpressError = require("./utils/ExpressError"); //import custom error class
 
 // const Joi = require("joi"); // import joi javascript validator module // no longer required in this file as schema definition moved to own file
-const { joiLibSchema, joiRevSchema } = require("./schemas/schemas");
-const res = require("express/lib/response");
+// const { joiLibSchema, joiRevSchema } = require("./schemas/schemas");
+// const res = require("express/lib/response");
 // const { populate } = require("./models/libraries"); // populate not used right now
 
+// router imports, for compartmentalizing routes
+const libraries = require("./routes/libraries");
+const reviews = require("./routes/reviews");
+
+//connect mongoose to mongodb at this directory
 mongoose.connect("mongodb://localhost:27017/libraries", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}); //connect mongoose to mongodb at this directory
+});
 
 const db = mongoose.connection; //assign db shorthand to mongoose.connection
 db.on(
@@ -47,153 +54,41 @@ const port = 3000; //set listening port to this
 app.use(express.urlencoded({ extended: true })); //express middleware body parser
 app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
 
+//express start server
 app.listen(port, function () {
   console.log("---> App started");
   console.log(`---> Listening on port ${port}`);
-}); //express start server
+});
 
-function joiLibValidate(req, res, next) {
-  console.log("---> JOI library validation is running");
-  const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
-  // throw error if there is an error validating
-  if (response.error) {
-    console.log("!--> JOI library validation failed");
-    console.log(response);
-    const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
-    throw new ExpressError(message, 400);
-  } else {
-    console.log("---> JOI library validation passed");
-    console.log(response);
-    next(); //move on to the route handler
-  }
-}
+// session and cookie
+const sessionConfig = {
+  secret: "libsAreSecretlyGood",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+app.use(session(sessionConfig));
 
-function joiRevValidate(req, res, next) {
-  console.log("---> JOI review validation is running");
-  const response = joiRevSchema.validate(req.body);
-  console.log(req.body);
-  console.log(response);
-  if (response.error) {
-    console.log("!--> JOI review validation failed");
-    console.log(response);
-    const message = response.error.details.map((el) => el.message).join(","); //I dont understand whi i cant just access message with response.error.details.message
-    throw new ExpressError(message, 400);
-  } else {
-    console.log("---> JOI review validation passed");
-    console.log(response);
-    next(); //move on to the route handler
-  }
-}
+// flash messages and variable reassignment middleware
+app.use(flash());
+app.use(function (req, res, next) {
+  res.locals.success = req.flash("success"); // just reassigns flash message to res.locals
+  res.locals.error = req.flash("error");
+  next(); // don't forget next, which makes this a middleware, else the request will just stop here
+});
+// this is done so that we always have req.flash in locals, and don't need to pass it to render every time
 
-// TODO: streamline requests with more advanced express router to
-// reduce duplicate code
-app.get("/libraries", async function (req, res) {
-  const result = await Library.find({});
-  res.render("libraries/index", { result, req });
-}); //run this when receiving get request to "/"
+// routers
+app.use("/libraries", libraries); // for routes that starts with /libraries, use the libraries router
+app.use("/libraries/:id/reviews", reviews); // for routes that starts with /libraries/:id/reviews, use the libraries router
+// params needs to be passed on the router file with mergeParams
 
-//; if get /:id is placed before /new, express will try to
-//try to search and match a details page with the id of "new".
-//place get /new first to solve this issue
-
-app.get("/libraries/new", function (req, res) {
-  res.render("libraries/new", { req });
-}); //new form route for to create libraries
-
-app.get(
-  "/libraries/:id",
-  errorWrapper(async function (req, res) {
-    const { id } = req.params; //destructure req.params to get id
-    const result = await Library.findById(id).populate("reviews");
-    // console.log(result.reviews);
-    res.render("libraries/details", { result, req });
-  })
-); //details route for specific libraries
-
-app.get(
-  "/libraries/:id/edit",
-  errorWrapper(async function (req, res) {
-    const { id } = req.params;
-    const result = await Library.findById(id);
-    res.render("libraries/edit", { result, req });
-  })
-); //serve edit form
-
-app.post(
-  "/libraries",
-  joiLibValidate,
-  errorWrapper(async function (req, res) {
-    // the error wrapper is used to wrap this function in a try catch to catch any async errors
-    //res.send(req.body); //by default, req.body is empty, it needs to be parsed
-    // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
-    const lib = new Library(req.body.lib);
-    await lib.save();
-    res.redirect(`/libraries/${lib._id}`);
-  })
-); // post req new library
-
-app.put(
-  "/libraries/:id",
-  joiLibValidate,
-  errorWrapper(async function (req, res) {
-    const { id } = req.params;
-    await Library.findByIdAndUpdate(
-      id,
-      { ...req.body.lib },
-      { runValidators: true }
-    ); //spread operator pass all elements of iterable lib
-    res.redirect(`/libraries/${id}`);
-  })
-); //update route
-
-app.delete(
-  "/libraries/:id",
-  errorWrapper(async function (req, res) {
-    const { id } = req.params;
-    await Library.findByIdAndDelete(id);
-    res.redirect("/libraries");
-  })
-); //delete route
-
-// review post route
-// changes needed to account for rating an username
-app.post(
-  "/libraries/:id/reviews",
-  joiRevValidate,
-  errorWrapper(async function (req, res) {
-    const library = await Library.findById(req.params.id);
-    const review = new Review(req.body.review);
-    library.reviews.push(review); // push newly made review into the library doc
-    await review.save();
-    await library.save();
-    res.redirect(`/libraries/${req.params.id}`);
-  })
-);
-
-// review delete route
-app.delete(
-  "/libraries/:id/reviews/:reviewId",
-  errorWrapper(async function (req, res) {
-    const { id, reviewId } = req.params;
-    await Review.findByIdAndDelete(reviewId);
-    await Library.findByIdAndUpdate(id, { $pull: { reviews: reviewId } }); // $pull will remove all instances of values that match reviews: reviewID
-    res.redirect(`/libraries/${id}`);
-  })
-);
-
-// review delete route // WIP TODO
-// app.put("/libraries/:id/reviews/:reviewId", async function () {
-//   res.send("rev delete route");
-// });
-
-// app.get("/newlibrary", async function (req, res) {
-//   const lib = new Library({
-//     name: "Test Library",
-//     description: "This is a test library",
-//   });
-//   await lib.save(); //wait for this to finish
-//   res.send(lib);
-// }); //create async function and create a new test library
+// serve static files
+app.use(express.static(path.join(__dirname, "public")));
 
 // 404 catch
 app.all("*", function (req, res, next) {
