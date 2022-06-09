@@ -16,17 +16,17 @@ const { joiLibSchema } = require("../schemas/schemas");
 
 // JOI validation
 function joiLibValidate(req, res, next) {
-  console.log("---> JOI library validation is running");
+  // console.log("---> JOI library validation is running");
   const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
   // throw error if there is an error validating
   if (response.error) {
-    console.log("!--> JOI library validation failed");
-    console.log(response);
+    // console.log("!--> JOI library validation failed");
+    // console.log(response);
     const message = response.error.details.map((el) => el.message).join(","); //I don't understand whi i cant just access message with response.error.details.message
     throw new ExpressError(message, 400);
   } else {
-    console.log("---> JOI library validation passed");
-    console.log(response);
+    // console.log("---> JOI library validation passed");
+    // console.log(response);
     next(); //move on to the route handler
   }
 }
@@ -76,7 +76,8 @@ router.post(
     // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
     const lib = new Library(req.body.lib);
     await lib.save();
-    req.flash("success", "Successfully created new library");
+    req.flash("status", "Success");
+    req.flash("message", "Successfully created new library");
     res.redirect(`/libraries/${lib._id}`);
   })
 );
@@ -92,6 +93,8 @@ router.put(
       { ...req.body.lib },
       { runValidators: true }
     ); //spread operator pass all elements of iterable lib
+    req.flash("status", "Success");
+    req.flash("message", "Successfully edited library");
     res.redirect(`/libraries/${id}`);
   })
 );
@@ -102,6 +105,8 @@ router.delete(
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndDelete(id);
+    req.flash("status", "Success");
+    req.flash("message", "Successfully deleted library");
     res.redirect("/libraries");
   })
 );

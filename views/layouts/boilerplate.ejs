@@ -30,18 +30,15 @@
   <!-- banner here-->
   <%- include("../partials/navbar") %>
   <!-- flash messages here -->
-  <!-- <%= success %> -->
-  <% if (success || error) { %>
-  <p>it is <%= success %></p>
+  <% if (status.length) {%>
+  <%- include("../partials/flashMessage")%>
   <% } %>
 
   <!-- navbar here -->
   <%- body %>
   <!-- body here -->
 
-  <footer class="mainFooter">
-    <span class="footerLogo">&copy;/Libs</span>
-  </footer>
+  <%- include("../partials/footer") %>
 
   <script src="scripts/mainScript.js"></script>
 </body>

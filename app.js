@@ -67,7 +67,7 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // js millisecond based time
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
@@ -76,8 +76,8 @@ app.use(session(sessionConfig));
 // flash messages and variable reassignment middleware
 app.use(flash());
 app.use(function (req, res, next) {
-  res.locals.success = req.flash("success"); // just reassigns flash message to res.locals
-  res.locals.error = req.flash("error");
+  res.locals.status = req.flash("status"); // just reassigns flash message to res.locals
+  res.locals.message = req.flash("message");
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
 // this is done so that we always have req.flash in locals, and don't need to pass it to render every time

@@ -123,10 +123,29 @@ const validateForm = {
   // IDEA - make a function which accepts args that are the names, id, class of the elements that needs to be verified and do so
 };
 
+// basic functionality to the flash messages, close button
+// TODO add failure
+// SVG object does not respond to addeventlistener for some reason
+function dismissMessage() {
+  const closeButton = document.querySelector(".closeButton");
+  if (closeButton !== null) {
+    document
+      .querySelector(".flashMessage")
+      .addEventListener("click", function () {
+        console.log("hello");
+        console.log(this);
+      });
+    closeButton.addEventListener("click", function () {
+      console.log("hello");
+    });
+  }
+}
+
 // run these functions on every request
 function app() {
   navSlide();
   cardLink();
+  dismissMessage();
 }
 
 app();
