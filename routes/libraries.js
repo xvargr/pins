@@ -76,7 +76,7 @@ router.post(
     // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
     const lib = new Library(req.body.lib);
     await lib.save();
-    req.flash("status", "Success");
+    req.flash("status", "success");
     req.flash("message", "Successfully created new library");
     res.redirect(`/libraries/${lib._id}`);
   })
@@ -93,7 +93,7 @@ router.put(
       { ...req.body.lib },
       { runValidators: true }
     ); //spread operator pass all elements of iterable lib
-    req.flash("status", "Success");
+    req.flash("status", "success");
     req.flash("message", "Successfully edited library");
     res.redirect(`/libraries/${id}`);
   })
@@ -105,7 +105,7 @@ router.delete(
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndDelete(id);
-    req.flash("status", "Success");
+    req.flash("status", "success");
     req.flash("message", "Successfully deleted library");
     res.redirect("/libraries");
   })
