@@ -646,3 +646,9 @@ button:hover,
   display: inline;
   height: 1rem;
 }
+.closeButton:hover {
+  cursor: pointer;
+}
+.success {
+  background-color: magenta;
+}

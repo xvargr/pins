@@ -128,15 +128,19 @@ const validateForm = {
 // SVG object does not respond to addeventlistener for some reason
 function dismissMessage() {
   const closeButton = document.querySelector(".closeButton");
+  const flashMessage = document.querySelector(".flashMessage");
   if (closeButton !== null) {
-    document
-      .querySelector(".flashMessage")
-      .addEventListener("click", function () {
-        console.log("hello");
-        console.log(this);
-      });
+    // note to self, can't place event listener on objects for some reason
+
     closeButton.addEventListener("click", function () {
-      console.log("hello");
+      // some simple transition before removing element
+      // avoiding animation keyframes by setting transition styling in js
+      flashMessage.style.transition = "opacity 500ms ease";
+      flashMessage.style.opacity = 0;
+      // delete the element after the same amount of time the animation takes
+      setTimeout(function () {
+        this.closest("body").removeChild(flashMessage);
+      }, 500);
     });
   }
 }

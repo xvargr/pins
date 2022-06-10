@@ -1,7 +1,8 @@
-  <span class="flashMessage">
-    <div>
-      <div><%= status %></div>
-      <object data="../../public/svg/x-symbol-svgrepo-com.svg" class="closeButton"></object>
-    </div>
-    <div><%= message %></div>
-  </span>
+<!-- check if error or success and apply classes as necessary -->
+<span class="flashMessage <%= status %>">
+  <div>
+    <div><%= status %></div>
+    <img src="../../public/svg/x-symbol-svgrepo-com.svg" alt="closeButton" class="closeButton">
+  </div>
+  <div><%= message %></div>
+</span>
