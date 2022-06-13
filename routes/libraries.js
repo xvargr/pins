@@ -6,7 +6,7 @@ const errorWrapper = require("../utils/errorWrapper"); //import error wrapper fu
 const ExpressError = require("../utils/ExpressError"); //import custom error class
 
 // import flash for alert messages
-const flash = require("connect-flash");
+const flashMessage = require("../utils/flashMessage");
 
 //import schema models
 const Library = require("../models/libraries");
@@ -51,6 +51,10 @@ router.get(
   errorWrapper(async function (req, res) {
     const { id } = req.params; //destructure req.params to get id
     const result = await Library.findById(id).populate("reviews");
+    // if (!result) { // does not work, mongo error id invalid
+    //   flashMessage(req, "error", "no libraries found matching that id");
+    //   return res.redirect("libraries");
+    // }
     // console.log(result.reviews);
     res.render("libraries/details", { result, req });
   })
@@ -76,8 +80,7 @@ router.post(
     // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
     const lib = new Library(req.body.lib);
     await lib.save();
-    req.flash("status", "success");
-    req.flash("message", "Successfully created new library");
+    flashMessage(req, "success", "successfully created new library");
     res.redirect(`/libraries/${lib._id}`);
   })
 );
@@ -94,7 +97,7 @@ router.put(
       { runValidators: true }
     ); //spread operator pass all elements of iterable lib
     req.flash("status", "success");
-    req.flash("message", "Successfully edited library");
+    flashMessage(req, "success", "successfully updated library");
     res.redirect(`/libraries/${id}`);
   })
 );
@@ -105,8 +108,7 @@ router.delete(
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndDelete(id);
-    req.flash("status", "success");
-    req.flash("message", "Successfully deleted library");
+    flashMessage(req, "success", "successfully deleted library");
     res.redirect("/libraries");
   })
 );
