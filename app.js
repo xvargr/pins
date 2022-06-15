@@ -18,9 +18,9 @@ app.use(formMethod("_method")); //defining methodOverride query value
 
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 
-// //import schema models
-// const Library = require("./models/libraries");
-// const Review = require("./models/reviews");
+const passport = require("passport"); // import npm module for user auth
+const passportLocal = require("passport-local"); // and the local auth strategy for passport
+const User = require("./models/user"); // import user model for use with passport
 
 // const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
 const ExpressError = require("./utils/ExpressError"); //import custom error class
@@ -51,9 +51,6 @@ db.once("open", function () {
 
 const port = 3000; //set listening port to this
 
-app.use(express.urlencoded({ extended: true })); //express middleware body parser
-app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
-
 //express start server
 app.listen(port, function () {
   console.log("---> App started");
@@ -73,6 +70,10 @@ const sessionConfig = {
 };
 app.use(session(sessionConfig));
 
+// use routes, on every requests
+app.use(express.urlencoded({ extended: true })); //express middleware body parser
+app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
+
 // flash messages and variable reassignment middleware
 app.use(flash());
 app.use(function (req, res, next) {
@@ -81,6 +82,13 @@ app.use(function (req, res, next) {
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
 // this is done so that we always have req.flash in locals, and don't need to pass it to render every time
+
+// passport auth middleware
+app.use(passport.initialize()); // initializes passport
+app.use(passport.session()); // use sessions for persistent logins with passport
+passport.use(new passportLocal(User.authenticate())); // use local strategy authentication, with the auth method being authenticate() on the User model. that model is added to the user model with UserSchema.plugin(passLocMongoose)
+passport.serializeUser(User.serializeUser()); // use this method to serialize users, basically how to store in session????
+passport.deserializeUser(User.deserializeUser()); // use this method to deserialize users
 
 // routers
 app.use("/libraries", libraries); // for routes that starts with /libraries, use the libraries router

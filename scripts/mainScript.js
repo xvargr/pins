@@ -145,11 +145,50 @@ function dismissMessage() {
   }
 }
 
+function serveAuthForm() {
+  //check if not logged in, then show sign in, else show sign out
+  const authButton = document.querySelector(".authButton");
+  const authFormOverlay = document.querySelector(".authFormOverlay");
+  // window.addEventListener("keydown", function (e) {
+  //   console.log(e);
+  //   console.log(`e.key is ${e.key}`);
+  //   console.log(`e.code is ${e.code}`);
+  // });
+  // authFormOverlay.addEventListener("keydown", function (e) {
+  //   e.preventDefault();
+  //   console.log("hello");
+  //   console.log(`e.key is ${e.key}`);
+  //   console.log(`e.code is ${e.code}`);
+  // });
+  function closeOverlay(e) {
+    console.log(e);
+    // if (e.type === "click" || e.key === "Escape") {
+    //   console.log("hello");
+    // }
+  }
+  authButton.addEventListener("click", function () {
+    authFormOverlay.style.display = "inline";
+    authFormOverlay.focus();
+  });
+  // authFormOverlay.addEventListener("click", closeOverlay());
+  // authFormOverlay.addEventListener("keydown", closeOverlay());
+  authFormOverlay.addEventListener("click", function (e) {
+    console.log(e);
+  });
+  authFormOverlay.addEventListener(
+    "keydown",
+    (function (e) {
+      console.log(e);
+    })()
+  );
+}
+
 // run these functions on every request
 function app() {
   navSlide();
   cardLink();
   dismissMessage();
+  serveAuthForm();
 }
 
 app();

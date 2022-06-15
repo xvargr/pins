@@ -269,15 +269,16 @@ button:hover,
 .editForm input {
   width: 80%;
   padding: 0.3rem;
-  background-color: rgb(209, 209, 209);
-  color: black;
+  background-color: rgb(73, 73, 73);
+  color: aliceblue;
   border-radius: 0.5rem;
   border-style: none;
+  transition: background-color 0.2s ease-in;
   /* border: 2px solid transparent;
   transition: background-color 0.2s ease-in; */
 }
 .editForm input:hover {
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(88, 88, 88);
 }
 /* I think this is a very good styling method, easily applied to other forms */
 .formValidationFailed {
@@ -311,7 +312,6 @@ button:hover,
   color: rgb(255, 255, 255);
   font-size: 1.5rem;
   font-weight: bold;
-  width: 15%;
   padding-left: 1rem;
 }
 
@@ -330,6 +330,21 @@ button:hover,
   padding-right: 1rem;
 }
 
+.navbarRightCluster {
+  display: flex;
+}
+.navbarRightCluster > * {
+  margin: 0.5rem;
+}
+.navbarRightCluster > button {
+  background-color: rgb(56, 56, 56);
+  border-radius: 0.3rem;
+  padding: 0.2rem 1rem;
+}
+.navbarRightCluster > button:hover {
+  background-color: rgb(88, 88, 88);
+}
+
 .burger {
   display: none;
   height: 2rem;
@@ -344,8 +359,19 @@ button:hover,
 } */
 .burger div {
   width: 90%;
-  height: 10%;
+  height: 12%;
   background-color: white;
+}
+
+/* auth form overlay */
+.authFormOverlay {
+  display: none;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  z-index: 1;
 }
 
 /* Switch from mobile headers to desktop header based on width */
@@ -588,7 +614,8 @@ button:hover,
 .reviewsContainer > form > textarea {
   width: 90%;
   height: 3rem;
-  background-color: rgb(212, 212, 212);
+  background-color: rgb(73, 73, 73);
+  color: aliceblue;
   border: none;
   border-radius: 0.2rem;
   resize: none;
