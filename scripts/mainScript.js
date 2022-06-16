@@ -149,38 +149,52 @@ function serveAuthForm() {
   //check if not logged in, then show sign in, else show sign out
   const authButton = document.querySelector(".authButton");
   const authFormOverlay = document.querySelector(".authFormOverlay");
-  // window.addEventListener("keydown", function (e) {
-  //   console.log(e);
-  //   console.log(`e.key is ${e.key}`);
-  //   console.log(`e.code is ${e.code}`);
-  // });
-  // authFormOverlay.addEventListener("keydown", function (e) {
-  //   e.preventDefault();
-  //   console.log("hello");
-  //   console.log(`e.key is ${e.key}`);
-  //   console.log(`e.code is ${e.code}`);
-  // });
-  function closeOverlay(e) {
-    console.log(e);
-    // if (e.type === "click" || e.key === "Escape") {
-    //   console.log("hello");
-    // }
-  }
+  const authFormToggleButton = document.querySelector("#authFormToggleButton");
+  const signInForm = document.querySelector(".signInForm");
+  const registerForm = document.querySelector(".registerForm");
+
+  // auth button click brings up auth overlay
   authButton.addEventListener("click", function () {
-    authFormOverlay.style.display = "inline";
+    authFormOverlay.style.display = "flex";
     authFormOverlay.focus();
   });
-  // authFormOverlay.addEventListener("click", closeOverlay());
-  // authFormOverlay.addEventListener("keydown", closeOverlay());
-  authFormOverlay.addEventListener("click", function (e) {
-    console.log(e);
+  // if esc or click on other area except form, close overlay
+  ["click", "keydown"].forEach((event) => {
+    authFormOverlay.addEventListener(event, function (e) {
+      if (e.type === "click" && e.target.className === "authFormOverlay") {
+        authFormOverlay.style.display = "none";
+      } else if (e.key === "Escape") {
+        authFormOverlay.style.display = "none";
+      }
+    });
   });
-  authFormOverlay.addEventListener(
-    "keydown",
-    (function (e) {
-      console.log(e);
-    })()
-  );
+
+  // form toggle button
+  authFormToggleButton.addEventListener("click", function () {
+    registerForm.classList.toggle("hidden");
+    signInForm.classList.toggle("hidden");
+    if (authFormToggleButton.innerText === "Sign Up") {
+      authFormToggleButton.innerText = "Sign In";
+    } else if (authFormToggleButton.innerText === "Sign In") {
+      authFormToggleButton.innerText = "Sign Up";
+    }
+  });
+
+  // refactored
+  // authFormOverlay.addEventListener("click", function (e) {
+  //   console.log(e);
+  //   console.dir(e.target.className);
+  //   if (e.target.className === "authFormOverlay") {
+  //     authFormOverlay.style.display = "none";
+  //   }
+  // });
+  // authFormOverlay.addEventListener("keydown", function (e) {
+  //   console.log(e);
+  //   console.log(e.key);
+  //   if (e.key === "Escape") {
+  //     authFormOverlay.style.display = "none";
+  //   }
+  // });
 }
 
 // run these functions on every request

@@ -13,6 +13,7 @@
   </ul>
 
   <div class="navbarRightCluster">
+    <!-- <button class="authButton">LOGOUT</button> -->
     <button class="authButton">LOGIN</button>
     <div class="burger">
       <div class="line1"></div>
@@ -21,4 +22,24 @@
     </div>
   </div>
 </div>
-<div class="authFormOverlay" tabindex="-1"></div>
+<!-- auth form -->
+<div class="authFormOverlay" tabindex="-1">
+  <div class="authContainer">
+    <div class="logo">/LIBS</div>
+    <form class="signInForm">
+      <label>Username <input type="text" name="user[username]" id="username" autocomplete="off">
+      </label>
+      <label>Password <input type="password" name="user[password]" id="password">
+      </label>
+      <button>Sign In</button>
+    </form>
+    <form class="registerForm hidden">
+      <label>Username <input type="text" name="user[username]" autocomplete="off">
+      </label>
+      <label>Password <input type="password" name="user[password]">
+      </label>
+      <button>Register</button>
+    </form>
+    <button id="authFormToggleButton">Sign Up</button>
+  </div>
+</div>

@@ -31,8 +31,9 @@ const ExpressError = require("./utils/ExpressError"); //import custom error clas
 // const { populate } = require("./models/libraries"); // populate not used right now
 
 // router imports, for compartmentalizing routes
-const libraries = require("./routes/libraries");
-const reviews = require("./routes/reviews");
+const libraryRoutes = require("./routes/libraries");
+const reviewRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
 
 //connect mongoose to mongodb at this directory
 mongoose.connect("mongodb://localhost:27017/libraries", {
@@ -91,8 +92,9 @@ passport.serializeUser(User.serializeUser()); // use this method to serialize us
 passport.deserializeUser(User.deserializeUser()); // use this method to deserialize users
 
 // routers
-app.use("/libraries", libraries); // for routes that starts with /libraries, use the libraries router
-app.use("/libraries/:id/reviews", reviews); // for routes that starts with /libraries/:id/reviews, use the libraries router
+app.use("/libraries", libraryRoutes); // for routes that starts with /libraries, use the libraries router
+app.use("/libraries/:id/reviews", reviewRoutes); // for routes that starts with /libraries/:id/reviews, use the libraries router
+app.use("/user", userRoutes);
 // params needs to be passed on the router file with mergeParams
 
 // serve static files
