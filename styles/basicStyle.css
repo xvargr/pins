@@ -197,6 +197,19 @@ a:hover {
 ul > * {
   margin: 0.5rem;
 }
+input {
+  background-color: rgb(73, 73, 73);
+  color: aliceblue;
+  border-radius: 0.2rem;
+  border-style: none;
+  transition: background-color 0.2s ease-in;
+}
+input:hover {
+  background-color: rgb(88, 88, 88);
+}
+:focus {
+  outline: 1px solid rgb(109, 109, 109);
+}
 
 .price {
   color: rgb(0, 121, 64);
@@ -296,6 +309,7 @@ button:hover,
 /* navbar */
 .navbar {
   display: flex;
+  max-height: 3rem;
   justify-content: space-between;
   align-items: center;
   background-color: rgb(0, 121, 64);
@@ -338,6 +352,7 @@ button:hover,
 }
 .navbarRightCluster > button {
   background-color: rgb(56, 56, 56);
+  color: aliceblue;
   border-radius: 0.3rem;
   padding: 0.2rem 1rem;
 }
@@ -363,17 +378,6 @@ button:hover,
   background-color: white;
 }
 
-/* auth form overlay */
-.authFormOverlay {
-  display: none;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  position: fixed;
-  top: 0;
-  z-index: 1;
-}
-
 /* Switch from mobile headers to desktop header based on width */
 @media (max-width: 900px) {
   .headerSpacer {
@@ -395,7 +399,7 @@ button:hover,
     align-items: center;
     position: fixed;
     right: 0;
-    top: 5.5vh;
+    top: 5vh;
     height: 15vh;
     width: 100%;
     background-color: rgb(0, 82, 44);
@@ -421,6 +425,64 @@ button:hover,
 
 .titleHidden {
   opacity: 0;
+}
+
+/* auth form overlay */
+.authFormOverlay {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  max-width: 40rem;
+  height: 60%;
+  max-height: 30rem;
+  background-color: rgb(43, 43, 43);
+  border-radius: 1rem;
+  box-shadow: 10px 10px 22px -5px rgba(0, 0, 0, 0.7);
+}
+.authContainer > .logo {
+  margin: 0.5rem 0;
+}
+.authContainer > button {
+  width: 20%;
+  margin: 0.5rem;
+  margin-left: auto;
+}
+.registerForm,
+.signInForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 80%;
+}
+.registerForm > *,
+.signInForm > * {
+  margin: 0.3rem;
+}
+.authContainer label {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+}
+.authContainer input {
+  width: 70%;
+}
+.authContainer > .hidden {
+  display: none;
 }
 
 /* footer */
