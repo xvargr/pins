@@ -3,33 +3,18 @@
 <main>
   <h1>Report new library</h1>
 
-  <form
-    action="/libraries"
-    class="editForm"
-    method="post"
-    onsubmit="return formValidation()"
-  >
+  <form action="/libraries" class="editForm" method="post" onsubmit="return validateForm.library()">
     <div>
       <label for="name">Name:</label>
       <input type="text" name="lib[name]" id="name" autocomplete="off" />
     </div>
     <div>
       <label for="description">Description:</label>
-      <input
-        type="text"
-        name="lib[description]"
-        id="description"
-        autocomplete="off"
-      />
+      <input type="text" name="lib[description]" id="description" autocomplete="off" />
     </div>
     <div>
       <label for="location">Location:</label>
-      <input
-        type="text"
-        name="lib[location]"
-        id="location"
-        autocomplete="off"
-      />
+      <input type="text" name="lib[location]" id="location" autocomplete="off" />
     </div>
     <!-- <div>
       <label for="location">Location:</label>

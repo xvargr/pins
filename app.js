@@ -20,7 +20,7 @@ const mongoose = require("mongoose"); //import mongoose module to work with mong
 
 const passport = require("passport"); // import npm module for user auth
 const passportLocal = require("passport-local"); // and the local auth strategy for passport
-const User = require("./models/user"); // import user model for use with passport
+const User = require("./models/users"); // import user model for use with passport
 
 // const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
 const ExpressError = require("./utils/ExpressError"); //import custom error class
@@ -34,6 +34,7 @@ const ExpressError = require("./utils/ExpressError"); //import custom error clas
 const libraryRoutes = require("./routes/libraries");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/users");
+// const { compile } = require("joi");
 
 //connect mongoose to mongodb at this directory
 mongoose.connect("mongodb://localhost:27017/libraries", {
@@ -50,9 +51,8 @@ db.once("open", function () {
   console.log("---> Mongo.db connected");
 }); //once mongo is connected
 
-const port = 3000; //set listening port to this
-
 //express start server
+const port = 3000; //set listening port to this
 app.listen(port, function () {
   console.log("---> App started");
   console.log(`---> Listening on port ${port}`);
@@ -76,10 +76,12 @@ app.use(express.urlencoded({ extended: true })); //express middleware body parse
 app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
 
 // flash messages and variable reassignment middleware
-app.use(flash());
+app.use(flash()); // innit flash, now all req objects have a method called flash("key", "message")
 app.use(function (req, res, next) {
   res.locals.status = req.flash("status"); // just reassigns flash message to res.locals
-  res.locals.message = req.flash("message");
+  res.locals.message = req.flash("message"); // take the value associated with the "message" key
+  // console.log(res.locals);
+  console.log(req.session); // <----- HERE!!! passport flash doesn't work, but there is a flash property here in session instead of locals
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
 // this is done so that we always have req.flash in locals, and don't need to pass it to render every time
@@ -94,7 +96,7 @@ passport.deserializeUser(User.deserializeUser()); // use this method to deserial
 // routers
 app.use("/libraries", libraryRoutes); // for routes that starts with /libraries, use the libraries router
 app.use("/libraries/:id/reviews", reviewRoutes); // for routes that starts with /libraries/:id/reviews, use the libraries router
-app.use("/user", userRoutes);
+app.use("/users", userRoutes);
 // params needs to be passed on the router file with mergeParams
 
 // serve static files
@@ -102,7 +104,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // 404 catch
 app.all("*", function (req, res, next) {
-  console.log("!---> 404 triggered");
+  console.log("!--> 404 triggered");
   next(new ExpressError("Page Not Found", 404));
 });
 
