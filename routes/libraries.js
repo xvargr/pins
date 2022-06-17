@@ -60,7 +60,7 @@ router.get(
   })
 );
 
-// edit route
+// edit route form
 router.get(
   "/:id/edit",
   errorWrapper(async function (req, res) {
@@ -96,7 +96,6 @@ router.put(
       { ...req.body.lib },
       { runValidators: true }
     ); //spread operator pass all elements of iterable lib
-    req.flash("status", "success");
     flashMessage(req, "success", "successfully updated library");
     res.redirect(`/libraries/${id}`);
   })

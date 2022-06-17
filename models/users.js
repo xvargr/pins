@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
   },
 });
+// USERNAME AND PASSWORD PROVIDED HERE vvvv
 UserSchema.plugin(passLocMongoose); // adds a username, hash and salt field to UserSchema
 // additionally, it also adds some methods to UserSchema
 

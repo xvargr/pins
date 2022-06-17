@@ -89,9 +89,10 @@ const validateForm = {
     }
     return formComplete;
   },
+  // most of these can be refactored, just accept id and validate fields
   // Specific edit form validation
-  editForm() {
-    console.log("---> client side edit form validation running");
+  library() {
+    // console.log("---> client side edit form validation running");
     // selecting form elements
     const name = document.querySelector("#name");
     const description = document.querySelector("#description");
@@ -103,22 +104,46 @@ const validateForm = {
     const fields = [name, description, location, fee];
     const formComplete = this.isRequired(fields);
     if (formComplete === false) {
-      console.log("---> client side form validation failed");
+      // console.log("---> client side form validation failed");
       return false;
     }
-    console.log("---> client side edit validation passed");
+    // console.log("---> client side form validation passed");
   },
   // review form validation
-  reviewForm() {
+  review() {
     const review = document.querySelector("#review");
     const rating = document.querySelector("[name='review[rating]']:checked");
     const fields = [review, rating];
     const formComplete = this.isRequired(fields);
     if (formComplete === false) {
-      console.log("---> client side form validation failed");
+      // console.log("---> client side form validation failed");
       return false;
     }
-    console.log("---> client side edit validation passed");
+    // console.log("---> client side form validation passed");
+  },
+  // login form validation
+  user() {
+    const username = document.querySelector("#username");
+    const password = document.querySelector("#password");
+    const fields = [username, password];
+    const formComplete = this.isRequired(fields);
+    if (formComplete === false) {
+      // console.log("---> client side form validation failed");
+      return false;
+    }
+    // console.log("---> client side form validation passed");
+  },
+  newUser() {
+    const username = document.querySelector("#newUsername");
+    const email = document.querySelector("#newEmail");
+    const password = document.querySelector("#newPassword");
+    const fields = [username, password, email];
+    const formComplete = this.isRequired(fields);
+    if (formComplete === false) {
+      // console.log("---> client side form validation failed");
+      return false;
+    }
+    // console.log("---> client side form validation passed");
   },
   // IDEA - make a function which accepts args that are the names, id, class of the elements that needs to be verified and do so
 };

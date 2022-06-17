@@ -26,17 +26,19 @@
 <div class="authFormOverlay" tabindex="-1">
   <div class="authContainer">
     <div class="logo">/LIBS</div>
-    <form class="signInForm">
+    <form class="signInForm" action="/users/login" method="post" onsubmit="return validateForm.user()">
       <label>Username <input type="text" name="user[username]" id="username" autocomplete="off">
       </label>
       <label>Password <input type="password" name="user[password]" id="password">
       </label>
       <button>Sign In</button>
     </form>
-    <form class="registerForm hidden">
-      <label>Username <input type="text" name="user[username]" autocomplete="off">
+    <form class="registerForm hidden" action="/users" method="post" onsubmit="return validateForm.newUser()">
+      <label>Email <input type="email" name="user[email]" id="newEmail" autocomplete="off">
       </label>
-      <label>Password <input type="password" name="user[password]">
+      <label>Username <input type="text" name="user[username]" id="newUsername" autocomplete="off">
+      </label>
+      <label>Password <input type="password" name="user[password]" id="newPassword">
       </label>
       <button>Register</button>
     </form>

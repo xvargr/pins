@@ -36,7 +36,7 @@
         <% } %>
 
       </div>
-      <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="return validateForm.reviewForm()">
+      <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="return validateForm.review()">
         <div>Leave a review</div>
         <textarea name="review[text]" id="review"></textarea>
         <div>
