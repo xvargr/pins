@@ -346,16 +346,30 @@ button:hover,
 
 .navbarRightCluster {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .navbarRightCluster > * {
   margin: 0.5rem;
 }
-.navbarRightCluster > button {
+/* .navbarRightCluster > a {
+  font-size: 0.9rem;
+  font-family: "Rubik", sans-serif;
   background-color: rgb(56, 56, 56);
   color: aliceblue;
   border-radius: 0.3rem;
   padding: 0.2rem 1rem;
+} */
+.navbarRightCluster > button,
+.navbarRightCluster > a {
+  font-size: 0.9rem;
+  font-family: "Rubik", sans-serif;
+  background-color: rgb(56, 56, 56);
+  color: aliceblue;
+  border-radius: 0.3rem;
+  padding: 0.3rem 1rem;
 }
+.navbarRightCluster > button:hover,
 .navbarRightCluster > button:hover {
   background-color: rgb(88, 88, 88);
 }
