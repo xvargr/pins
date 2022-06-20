@@ -19,7 +19,7 @@ app.use(formMethod("_method")); //defining methodOverride query value
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 
 const passport = require("passport"); // import npm module for user auth
-const passportLocal = require("passport-local"); // and the local auth strategy for passport
+const LocalStrategy = require("passport-local"); // and the local auth strategy for passport
 const User = require("./models/users"); // import user model for use with passport
 
 // const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
@@ -80,8 +80,27 @@ app.use(flash()); // innit flash, now all req objects have a method called flash
 app.use(function (req, res, next) {
   res.locals.status = req.flash("status"); // just reassigns flash message to res.locals
   res.locals.message = req.flash("message"); // take the value associated with the "message" key
+  // console.log("session");
+  // console.log(req.session);
+  // console.log("locals");
   // console.log(res.locals);
-  console.log(req.session); // <----- HERE!!! passport flash doesn't work, but there is a flash property here in session instead of locals
+
+  // passport error special case
+  const passportFlash = req.flash("error");
+  if (passportFlash.length > 0) {
+    res.locals.status = "error";
+    res.locals.message = passportFlash;
+    // console.log(res.locals.message);
+  }
+
+  // can't use this, flash is single use, but even checking if it's > 0 seems to delete it
+  // no way to check flash, it's like some quantum mechanics bs
+  // console.log(req.flash("error").length > 0); // returns true
+  // console.log(req.flash("error")); // but then is empty here
+  // if (req.flash("error").length > 0) {
+  // ...
+  // }
+
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
 // this is done so that we always have req.flash in locals, and don't need to pass it to render every time
@@ -89,9 +108,9 @@ app.use(function (req, res, next) {
 // passport auth middleware
 app.use(passport.initialize()); // initializes passport
 app.use(passport.session()); // use sessions for persistent logins with passport
-passport.use(new passportLocal(User.authenticate())); // use local strategy authentication, with the auth method being authenticate() on the User model. that model is added to the user model with UserSchema.plugin(passLocMongoose)
+passport.use(new LocalStrategy(User.authenticate())); // use local strategy authentication, with the auth method being authenticate() on the User model. that model is added to the user model with UserSchema.plugin(passLocMongoose)
 passport.serializeUser(User.serializeUser()); // use this method to serialize users, basically how to store in session????
-passport.deserializeUser(User.deserializeUser()); // use this method to deserialize users
+passport.deserializeUser(User.deserializeUser()); // use this method to deserialize users, read from session
 
 // routers
 app.use("/libraries", libraryRoutes); // for routes that starts with /libraries, use the libraries router

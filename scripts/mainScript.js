@@ -164,7 +164,7 @@ function dismissMessage() {
       flashMessage.style.opacity = 0;
       // delete the element after the same amount of time the animation takes
       setTimeout(function () {
-        this.closest("body").removeChild(flashMessage);
+        flashMessage.closest("body").removeChild(flashMessage);
       }, 500);
     });
   }

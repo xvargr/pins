@@ -8,11 +8,15 @@ const ExpressError = require("../utils/ExpressError"); //import custom error cla
 // import flash for alert messages
 const flashMessage = require("../utils/flashMessage");
 
+// imports middleware, checks for authentication
+const { isLoggedIn } = require("../utils/middleware"); // import auth check middleware for routes
+
 //import schema models
 const Library = require("../models/libraries");
 
 // import joi schemas
 const { joiLibSchema } = require("../schemas/schemas");
+const { session } = require("passport");
 
 // JOI validation
 function joiLibValidate(req, res, next) {
@@ -31,6 +35,7 @@ function joiLibValidate(req, res, next) {
   }
 }
 
+// show all route
 router.get("/", async function (req, res) {
   const result = await Library.find({});
   res.render("libraries/index", { result, req });
@@ -41,7 +46,7 @@ router.get("/", async function (req, res) {
 //place get /new first to solve this issue
 
 //new form route for to create libraries
-router.get("/new", function (req, res) {
+router.get("/new", isLoggedIn, function (req, res) {
   res.render("libraries/new", { req });
 });
 
@@ -60,9 +65,10 @@ router.get(
   })
 );
 
-// edit route form
+// edit form route
 router.get(
   "/:id/edit",
+  isLoggedIn,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     const result = await Library.findById(id);
@@ -74,6 +80,7 @@ router.get(
 router.post(
   "/",
   joiLibValidate,
+  isLoggedIn,
   errorWrapper(async function (req, res) {
     // the error wrapper is used to wrap this function in a try catch to catch any async errors
     // res.send(req.body); //by default, req.body is empty, it needs to be parsed
@@ -89,6 +96,7 @@ router.post(
 router.put(
   "/:id",
   joiLibValidate,
+  isLoggedIn,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndUpdate(
@@ -104,6 +112,7 @@ router.put(
 //delete route
 router.delete(
   "/:id",
+  isLoggedIn,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndDelete(id);

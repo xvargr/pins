@@ -11,11 +11,6 @@ const flashMessage = require("../utils/flashMessage");
 const User = require("../models/users");
 const passport = require("passport");
 
-// router.get("/", async function (req, res) {
-//   console.log("hello");
-//   res.redirect("/libraries");
-// });
-
 // register user
 router.post(
   "/",
@@ -25,6 +20,7 @@ router.post(
       const newUser = new User({ username, email });
       const registeredUser = await User.register(newUser, password); // this will hash and store the password
       flashMessage(req, "success", "Successfully registered");
+      console.log(registeredUser);
       res.redirect("/libraries");
     } catch (e) {
       flashMessage(req, "error", e.message);
@@ -33,7 +29,7 @@ router.post(
   })
 );
 
-// register user
+// log in user
 router.post(
   "/login",
   passport.authenticate("local", {
@@ -42,8 +38,20 @@ router.post(
   }), // passport middleware, pass in the strategy and params
   errorWrapper(async function (req, res) {
     // after successful auth by passport, else, flash and redirect, as params show
-    flashMessage(req, "success", "Logged");
+    flashMessage(req, "success", "Welcome back");
+    res.redirect("/libraries");
   })
 );
+
+// log out user
+router.get("/logout", function (req, res) {
+  req.logOut(function (err) {
+    if (err) {
+      return next(err);
+    }
+    flashMessage(req, "success", "Logged out");
+    res.redirect("/libraries");
+  });
+});
 
 module.exports = router;

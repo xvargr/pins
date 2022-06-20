@@ -30,9 +30,6 @@
   <!-- banner here-->
   <%- include("../partials/navbar") %>
   <!-- flash messages here -->
-  <%= console.log(status) %>
-  <%= console.log("locals vs session") %>
-  <%= console.log("locals needs to be explicitly deleted, sessions are only available per tab until it is closed") %>
 
   <% if (status.length) {%>
   <%- include("../partials/flashMessage")%>
