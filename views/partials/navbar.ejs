@@ -13,10 +13,17 @@
   </ul>
 
   <div class="navbarRightCluster">
-    <a href="/users/logout">LOGOUT</a>
-    <%= console.log(locals) %>
-    <%= console.log("need to check if user is logged in in template to show and hide logout button") %>
-    <button class="authButton">LOGIN</button>
+    <% if(user) { %>
+    <form action="/users/logout">
+      <button class="authButton">LOGOUT</button>
+    </form>
+    <button class="authButton" id="loginButton" style="display: none;">LOG IN</button>
+    <% } else {%>
+    <form action="/users/logout" style="display: none;">
+      <button class="authButton">LOGOUT</button>
+    </form>
+    <button class="authButton" id="loginButton">LOG IN</button>
+    <% } %>
     <div class="burger">
       <div class="line1"></div>
       <div class="line2"></div>

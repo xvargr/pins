@@ -75,7 +75,7 @@ app.use(session(sessionConfig));
 app.use(express.urlencoded({ extended: true })); //express middleware body parser
 app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
 
-// flash messages and variable reassignment middleware
+// flash messages and variable reassignment middleware using locals and sessions
 app.use(flash()); // innit flash, now all req objects have a method called flash("key", "message")
 app.use(function (req, res, next) {
   res.locals.status = req.flash("status"); // just reassigns flash message to res.locals
@@ -101,6 +101,13 @@ app.use(function (req, res, next) {
   // ...
   // }
 
+  req.session.lastPath = req.session.currPath; // where were you?
+  req.session.currPath = req.path; // where are you going?
+
+  // console.log("/// SESSION ///");
+  // console.log(req.session);
+  // console.log("/// LOCALS ///");
+  // console.log(res.locals);
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
 // this is done so that we always have req.flash in locals, and don't need to pass it to render every time
@@ -111,6 +118,16 @@ app.use(passport.session()); // use sessions for persistent logins with passport
 passport.use(new LocalStrategy(User.authenticate())); // use local strategy authentication, with the auth method being authenticate() on the User model. that model is added to the user model with UserSchema.plugin(passLocMongoose)
 passport.serializeUser(User.serializeUser()); // use this method to serialize users, basically how to store in session????
 passport.deserializeUser(User.deserializeUser()); // use this method to deserialize users, read from session
+// pass on user info to locals
+app.use(function (req, res, next) {
+  res.locals.user = req.user; // user data, else undefined if not logged in
+
+  // console.log("from app");
+  // console.log(res.locals);
+  // console.log(req.session);
+  // console.log(req.user);
+  next();
+});
 
 // routers
 app.use("/libraries", libraryRoutes); // for routes that starts with /libraries, use the libraries router

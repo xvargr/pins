@@ -172,7 +172,7 @@ function dismissMessage() {
 
 function serveAuthForm() {
   //check if not logged in, then show sign in, else show sign out
-  const authButton = document.querySelector(".authButton");
+  const authButton = document.querySelector("#loginButton");
   const authFormOverlay = document.querySelector(".authFormOverlay");
   const authFormToggleButton = document.querySelector("#authFormToggleButton");
   const signInForm = document.querySelector(".signInForm");
