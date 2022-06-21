@@ -16,7 +16,6 @@ const Library = require("../models/libraries");
 
 // import joi schemas
 const { joiLibSchema } = require("../schemas/schemas");
-const { session } = require("passport");
 
 // JOI validation
 function joiLibValidate(req, res, next) {

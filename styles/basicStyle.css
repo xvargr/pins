@@ -361,7 +361,7 @@ button:hover,
   padding: 0.2rem 1rem;
 } */
 .navbarRightCluster > button,
-.navbarRightCluster > a {
+.authButton {
   font-size: 0.9rem;
   font-family: "Rubik", sans-serif;
   background-color: rgb(56, 56, 56);
@@ -370,10 +370,13 @@ button:hover,
   padding: 0.3rem 1rem;
 }
 .navbarRightCluster > button:hover,
-.navbarRightCluster > button:hover {
+.authButton:hover {
   background-color: rgb(88, 88, 88);
 }
-
+.navbarRightCluster > form {
+  margin: 0;
+  padding: 0;
+}
 .burger {
   display: none;
   height: 2rem;
@@ -531,7 +534,7 @@ button:hover,
 .columnContent:hover {
   cursor: pointer;
   transform: translate(-0.2rem, -0.2rem);
-  box-shadow: 5px 5px 10px 2px;
+  box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.473);
   background-color: rgb(47, 65, 47);
 }
 .columnContent > div {

@@ -14,14 +14,21 @@ const passport = require("passport");
 // register user
 router.post(
   "/",
-  errorWrapper(async function (req, res) {
+  errorWrapper(async function (req, res, next) {
     try {
       const { username, email, password } = req.body.user;
       const newUser = new User({ username, email });
       const registeredUser = await User.register(newUser, password); // this will hash and store the password
-      flashMessage(req, "success", "Successfully registered");
-      console.log(registeredUser);
-      res.redirect("/libraries");
+      req.login(registeredUser, (err) => {
+        if (err) return next(err);
+        flashMessage(
+          req,
+          "success",
+          `Successfully registered, welcome ${username}`
+        );
+        // console.log(registeredUser);
+        res.redirect("/libraries");
+      }); // logs in newly registered user with passport
     } catch (e) {
       flashMessage(req, "error", e.message);
       res.redirect("/libraries");
@@ -38,17 +45,15 @@ router.post(
   }), // passport middleware, pass in the strategy and params
   errorWrapper(async function (req, res) {
     // after successful auth by passport, else, flash and redirect, as params show
-    flashMessage(req, "success", "Welcome back");
+    flashMessage(req, "success", `Welcome back ${req.user.username}`);
     res.redirect("/libraries");
   })
 );
 
 // log out user
 router.get("/logout", function (req, res) {
-  req.logOut(function (err) {
-    if (err) {
-      return next(err);
-    }
+  req.logOut((err) => {
+    if (err) return next(err);
     flashMessage(req, "success", "Logged out");
     res.redirect("/libraries");
   });
