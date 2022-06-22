@@ -5,6 +5,9 @@ const Library = require("../../models/libraries"); //import library model
 const seedName = require("./seedNames"); //import seedNames
 const cities = require("./cities"); //import cities data
 
+const User = require("../../models/users");
+const ExpressError = require("../../utils/ExpressError");
+
 const size = 50;
 const maxPrice = 100;
 
@@ -34,9 +37,13 @@ function randomPrice(max = maxPrice, min = 0) {
   }
 }
 
+const defaultOwner = "admin";
 async function seedDB() {
   await Library.deleteMany({}); //delete everything in the Library database
   for (let i = 0; i < size; i++) {
+    const owner = await User.findOne({ username: `${defaultOwner}` });
+    // console.log(owner._id); // for some reason if id was asked in the same line, it returns undefined, but on a different line it returns the id
+
     const lib = new Library({
       name: `${pickOne(seedName.verbs)} ${pickOne(seedName.nouns)}`,
       description:
@@ -44,6 +51,7 @@ async function seedDB() {
       image: "https://via.placeholder.com/650x450",
       fee: randomPrice(),
       location: `${pickOne(cities).city}, ${pickOne(cities).state}`,
+      owner: `${owner._id}`,
       // reviews: [],
     });
     await lib.save(); //save the new lib
