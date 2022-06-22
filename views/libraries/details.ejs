@@ -5,13 +5,16 @@
   <div class="mainDetailsContainer">
 
     <div class="libDetailsContainer">
+      <div>Submitted by <%= result.owner.username %> </div>
       <img src="<%= result.image %> " class="detailsImage" />
       <div>Description: <%= result.description %></div>
       <div>Location: <%= result.location %></div>
       <div class="price">$<%= result.fee %></div>
       <div class="buttonContainer">
         <a class="anchorButton" href="/libraries">Back</a>
+        <% if ( user && (user._id.valueOf() === result.owner._id.valueOf())) {%>
         <a class="anchorButton" href="/libraries/<%= result._id %>/edit">Edit</a>
+        <% } %>
       </div>
     </div>
 
@@ -19,7 +22,6 @@
       <div class="reviewsTitle">Reviews</div>
       <div class="reviewsList">
         <% for (review of result.reviews) {  %>
-
         <div class="reviewItem">
           <div><span class="reviewer"><%= review.user %></span><span class="rating"><%= review.rating %> </span></div>
           <div><%= review.text %> </div>
@@ -32,10 +34,10 @@
             </form>
           </div>
         </div>
-
         <% } %>
 
       </div>
+      <% if ( user ) {%>
       <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="return validateForm.review()">
         <div>Leave a review</div>
         <textarea name="review[text]" id="review"></textarea>
@@ -48,6 +50,7 @@
         </div>
         <button>Submit review</button>
       </form>
+      <% } %>
     </div>
 
   </div>

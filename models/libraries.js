@@ -6,9 +6,18 @@ const Review = require("./reviews"); // import reviews schema
 const LibrarySchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  image: { type: String, required: false },
+  image: {
+    type: String,
+    required: false,
+    default: "https://via.placeholder.com/650x450",
+  },
   fee: { type: Number, required: true, min: 0 },
   location: { type: String, required: true },
+  owner: {
+    // owner is a reference
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   reviews: [
     {
       // this defines that the reviews key is a reference to another schema

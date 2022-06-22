@@ -54,7 +54,9 @@ router.get(
   "/:id",
   errorWrapper(async function (req, res) {
     const { id } = req.params; //destructure req.params to get id
-    const result = await Library.findById(id).populate("reviews");
+    const result = await Library.findById(id)
+      .populate("reviews")
+      .populate("owner");
     // if (!result) { // does not work, mongo error id invalid
     //   flashMessage(req, "error", "no libraries found matching that id");
     //   return res.redirect("libraries");
@@ -85,6 +87,7 @@ router.post(
     // res.send(req.body); //by default, req.body is empty, it needs to be parsed
     // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
     const lib = new Library(req.body.lib);
+    lib.owner = req.user._id; // assigns the current logged in user as the owner of the new lib
     await lib.save();
     flashMessage(req, "success", "successfully created new library");
     res.redirect(`/libraries/${lib._id}`);
@@ -98,11 +101,22 @@ router.put(
   isLoggedIn,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
-    await Library.findByIdAndUpdate(
-      id,
-      { ...req.body.lib },
-      { runValidators: true }
-    ); //spread operator pass all elements of iterable lib
+    // await Library.findByIdAndUpdate(
+    //   id,
+    //   { ...req.body.lib },
+    //   { runValidators: true }
+    // ); //spread operator pass all elements of iterable lib
+    const lib = await Library.findById(id);
+    let reviews = lib.reviews; // keep reviews
+    // if current logged in user is not owner, flash and redirect, else proceed
+    if (req.user._id.valueOf() !== lib.owner.valueOf()) {
+      flashMessage(req, "error", "You must be the owner to update");
+      return res.redirect(`/libraries/${id}`);
+    }
+    lib.overwrite({ ...req.body.lib }, { runValidators: true });
+    lib.owner = req.user._id;
+    lib.reviews = reviews;
+    await lib.save();
     flashMessage(req, "success", "successfully updated library");
     res.redirect(`/libraries/${id}`);
   })
