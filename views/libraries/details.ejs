@@ -23,8 +23,9 @@
       <div class="reviewsList">
         <% for (review of result.reviews) {  %>
         <div class="reviewItem">
-          <div><span class="reviewer"><%= review.user %></span><span class="rating"><%= review.rating %> </span></div>
+          <div><span class="reviewer"><%= review.owner.username %></span><span class="rating"><%= review.rating %> </span></div>
           <div><%= review.text %> </div>
+          <% if (user && (user._id.valueOf() === review.owner._id.valueOf()) ) { %>
           <div>
             <form action="">
               <button>edit</button>
@@ -33,6 +34,7 @@
               <button>delete</button>
             </form>
           </div>
+          <% } %>
         </div>
         <% } %>
 
