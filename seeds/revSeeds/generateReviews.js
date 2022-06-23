@@ -3,6 +3,7 @@ const { readFileSync } = require("fs");
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 const Review = require("../../models/reviews"); //import reviews model
 const Library = require("../../models/libraries"); //import library model
+const User = require("../../models/users");
 
 const adjectiveFile = "../words/english-adjectives.txt"; // path is relative to the node console
 const nounFile = "../words/english-nouns.txt"; // todo make path absolute
@@ -48,11 +49,13 @@ function makeUsername(adjectives, nouns) {
 async function generateReviews() {
   const libraries = await Library.find({}); // create new library array from all libs
   await Library.updateMany({}, { reviews: [] }); // clear all review fields
+  const defaultOwner = "admin";
   // create x num of reviews for each lib
   for (const library of libraries) {
+    const owner = await User.findOne({ username: `${defaultOwner}` });
     for (let i = 0; i < numOfReviews; i++) {
       let review = new Review({
-        user: makeUsername(adjectives, nouns),
+        owner: `${owner._id}`,
         text: "I used to practice weaving with spaghetti three hours a day but stopped because I didn't want to die alone.",
         rating: Math.floor(Math.random() * 5 + 1),
       });

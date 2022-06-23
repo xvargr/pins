@@ -3,36 +3,19 @@ const express = require("express");
 const router = express.Router();
 
 const errorWrapper = require("../utils/errorWrapper"); //import error wrapper function
-const ExpressError = require("../utils/ExpressError"); //import custom error class
 
 // import flash for alert messages
 const flashMessage = require("../utils/flashMessage");
 
 // imports middleware, checks for authentication
-const { isLoggedIn } = require("../utils/middleware"); // import auth check middleware for routes
+const {
+  isLoggedIn,
+  isLibOwner,
+  joiLibValidate,
+} = require("../utils/middleware"); // import auth check middleware for routes
 
 //import schema models
 const Library = require("../models/libraries");
-
-// import joi schemas
-const { joiLibSchema } = require("../schemas/schemas");
-
-// JOI validation
-function joiLibValidate(req, res, next) {
-  // console.log("---> JOI library validation is running");
-  const response = joiLibSchema.validate(req.body); //points joi to validate req.body based on joiSchema
-  // throw error if there is an error validating
-  if (response.error) {
-    // console.log("!--> JOI library validation failed");
-    // console.log(response);
-    const message = response.error.details.map((el) => el.message).join(","); //I don't understand whi i cant just access message with response.error.details.message
-    throw new ExpressError(message, 400);
-  } else {
-    // console.log("---> JOI library validation passed");
-    // console.log(response);
-    next(); //move on to the route handler
-  }
-}
 
 // show all route
 router.get("/", async function (req, res) {
@@ -55,7 +38,13 @@ router.get(
   errorWrapper(async function (req, res) {
     const { id } = req.params; //destructure req.params to get id
     const result = await Library.findById(id)
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "owner",
+          model: "User",
+        },
+      })
       .populate("owner");
     // if (!result) { // does not work, mongo error id invalid
     //   flashMessage(req, "error", "no libraries found matching that id");
@@ -70,6 +59,7 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isLibOwner,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     const result = await Library.findById(id);
@@ -99,6 +89,7 @@ router.put(
   "/:id",
   joiLibValidate,
   isLoggedIn,
+  isLibOwner,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     // await Library.findByIdAndUpdate(
@@ -109,10 +100,10 @@ router.put(
     const lib = await Library.findById(id);
     let reviews = lib.reviews; // keep reviews
     // if current logged in user is not owner, flash and redirect, else proceed
-    if (req.user._id.valueOf() !== lib.owner.valueOf()) {
-      flashMessage(req, "error", "You must be the owner to update");
-      return res.redirect(`/libraries/${id}`);
-    }
+    // if (req.user._id.valueOf() !== lib.owner.valueOf()) {
+    //   flashMessage(req, "error", "You must be the owner to update");
+    //   return res.redirect(`/libraries/${id}`);
+    // }
     lib.overwrite({ ...req.body.lib }, { runValidators: true });
     lib.owner = req.user._id;
     lib.reviews = reviews;
@@ -126,6 +117,7 @@ router.put(
 router.delete(
   "/:id",
   isLoggedIn,
+  isLibOwner,
   errorWrapper(async function (req, res) {
     const { id } = req.params;
     await Library.findByIdAndDelete(id);
