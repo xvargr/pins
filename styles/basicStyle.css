@@ -515,8 +515,10 @@ button:hover,
 .columnContainer {
   background-color: rgb(117, 117, 117);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
   flex-wrap: wrap;
   padding: 2% 2%;
   border-radius: 1rem;
@@ -529,7 +531,7 @@ button:hover,
   border-radius: 0.5rem;
   flex-basis: 0.5;
   transition: all 0.1s ease-in;
-  min-width: 100%;
+  max-width: 45%;
 }
 .columnContent:hover {
   cursor: pointer;
@@ -543,6 +545,8 @@ button:hover,
 
 .indexImage {
   flex-basis: auto;
+  object-fit: cover;
+  max-width: 40%;
   border-radius: 0.5rem 0 0 0.5rem;
 }
 
@@ -578,11 +582,11 @@ button:hover,
 
 @media (max-width: 1100px) {
   .columnContainer {
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
   }
   .columnContent {
-    min-width: none;
+    min-width: 100%;
   }
   .indexImage {
     display: none;

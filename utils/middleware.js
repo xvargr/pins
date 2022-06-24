@@ -3,6 +3,7 @@
 ////// AUTHENTICATION AND AUTHORIZATION
 const flashMessage = require("../utils/flashMessage");
 const Library = require("../models/libraries");
+const Review = require("../models/reviews");
 
 // uses the isAuthenticated passport middleware to check if user is signed in
 module.exports.isLoggedIn = function (req, res, next) {
@@ -19,32 +20,31 @@ module.exports.isLoggedIn = function (req, res, next) {
 };
 
 // check if current logged in user is the owner of the document being modified, let pass if true
-module.exports.isLibOwner = async function (req, res, next) {
-  console.log("========== PATH ===============");
+module.exports.isOwner = async function (req, res, next) {
   const path = req.originalUrl;
+  // console.log(path);
 
-  if (path.includes()) {
-    // for /libraries and /reviews for all in one function
+  // is item being modified a review item?
+  if (path.includes("/reviews")) {
+    const { reviewId } = req.params;
+    const review = await Review.findById(reviewId);
+
+    // console.log(req.user._id.valueOf() !== review.owner.valueOf());
+    if (req.user._id.valueOf() !== review.owner.valueOf()) {
+      flashMessage(req, "error", "You must be the owner to update");
+      return res.redirect(`/libraries/${id}`);
+    }
+
+    // is item a library?
+  } else if (path.includes("/libraries")) {
+    const { id } = req.params;
+    const lib = await Library.findById(id);
+
+    if (req.user._id.valueOf() !== lib.owner.valueOf()) {
+      flashMessage(req, "error", "You must be the owner to update");
+      return res.redirect(`/libraries/${id}`);
+    }
   }
-  const { id } = req.params;
-  const lib = await Library.findById(id);
-
-  if (req.user._id.valueOf() !== lib.owner.valueOf()) {
-    flashMessage(req, "error", "You must be the owner to update");
-    return res.redirect(`/libraries/${id}`);
-  }
-  next();
-};
-
-// check if current logged in user is the owner of the review item, let pass if true
-module.exports.isRevOwner = async function (req, res, next) {
-  // const { id } = req.params;
-  // const lib = await Library.findById(id);
-
-  // if (req.user._id.valueOf() !== lib.owner.valueOf()) {
-  //   flashMessage(req, "error", "You must be the owner to update");
-  //   return res.redirect(`/libraries/${id}`);
-  // }
   next();
 };
 

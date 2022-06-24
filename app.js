@@ -104,11 +104,11 @@ app.use(function (req, res, next) {
   req.session.lastPath = req.session.currPath; // where were you?
   req.session.currPath = req.path; // where are you going?
 
-  console.log("/// APP>JS>107 ///");
-  console.log("/// SESSION ///");
-  console.log(req.session);
-  console.log("/// LOCALS ///");
-  console.log(res.locals);
+  // console.log("/// APP>JS>107 ///");
+  // console.log("/// SESSION ///");
+  // console.log(req.session);
+  // console.log("/// LOCALS ///");
+  // console.log(res.locals);
 
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
@@ -123,11 +123,7 @@ passport.deserializeUser(User.deserializeUser()); // use this method to deserial
 // pass on user info to locals
 app.use(function (req, res, next) {
   res.locals.user = req.user; // user data, else undefined if not logged in
-  console.log("/// USER ///");
-  console.log(req.user);
-  // console.log("from app");
-  // console.log(res.locals);
-  // console.log(req.session);
+  // console.log("/// USER ///");
   // console.log(req.user);
   next();
 });
