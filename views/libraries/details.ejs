@@ -23,7 +23,17 @@
       <div class="reviewsList">
         <% for (review of result.reviews) {  %>
         <div class="reviewItem">
-          <div><span class="reviewer"><%= review.owner.username %></span><span class="rating"><%= review.rating %> </span></div>
+          <div>
+            <span class="reviewer"><%= review.owner.username %></span>
+            <span class="rating">
+              <% for (let i = review.rating; i>0; i--) {%>
+              &#9733;
+              <% } %>
+              <% for (let i = review.rating; i<5; i++) {%>
+              &#9734;
+              <% } %>
+            </span>
+          </div>
           <div><%= review.text %> </div>
           <% if (user && (user._id.valueOf() === review.owner._id.valueOf()) ) { %>
           <div>
@@ -43,6 +53,7 @@
       <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="return validateForm.review()">
         <div>Leave a review</div>
         <textarea name="review[text]" id="review"></textarea>
+        <!-- TODO: style rating input to stars -->
         <div>
           <% for (let i = 1; i <= 5; i++) { %>
           <label id="ratingLabel">
