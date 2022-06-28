@@ -669,6 +669,41 @@ button:hover,
   color: rgb(240, 240, 83);
 }
 
+/* Star rating */
+/* no idea how this works */
+.starRate:not(:checked) > input {
+  position: absolute;
+  top: -9999px;
+}
+.starRate:not(:checked) > label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #ccc;
+}
+.starRate:not(:checked) > label:before {
+  content: "★ ";
+}
+.starRate > input:checked ~ label {
+  color: rgb(240, 240, 83);
+}
+.starRate:not(:checked) > label:hover,
+.starRate:not(:checked) > label:hover ~ label {
+  color: #deb217;
+}
+.starRate > input:checked + label:hover,
+.starRate > input:checked + label:hover ~ label,
+.starRate > input:checked ~ label:hover,
+.starRate > input:checked ~ label:hover ~ label,
+.starRate > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+
+/* Reviews */
+
 .reviewsContainer > form {
   display: flex;
   flex-direction: column;
