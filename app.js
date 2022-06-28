@@ -1,3 +1,11 @@
+// if in development mode, require the dotenv package
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+  // .env files are hidden files where we store values that we want hidden
+  // key value pairs in the file can be accessed without displaying the secret value in our code when we share or ship it
+  // console.log(process.env.SECRET);
+}
+
 // npm init
 const express = require("express"); //import the express npm module for easy server setup
 const app = express(); //mapping express to app

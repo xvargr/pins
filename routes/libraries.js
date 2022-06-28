@@ -10,11 +10,20 @@ const libraryController = require("../controllers/libraries");
 // imports middleware, checks for authentication
 const { isLoggedIn, isOwner, joiLibValidate } = require("../utils/middleware"); // import auth check middleware for routes
 
+// multer multipart form data parser import
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 // index page and post req
 router
   .route("/")
   .get(errorWrapper(libraryController.index))
-  .post(joiLibValidate, isLoggedIn, errorWrapper(libraryController.newLibrary));
+  // .post(joiLibValidate, isLoggedIn, errorWrapper(libraryController.newLibrary));
+  .post(upload.single("lib[img]"), (req, res) => {
+    console.log(req.body);
+    console.log(req.file);
+    res.send("yo");
+  });
 
 // NOTE
 //; if get /:id is placed before /new, express will try to
@@ -23,6 +32,8 @@ router
 
 //new form route for to create libraries
 router.get("/new", isLoggedIn, libraryController.newForm);
+// multer gives access to the upload.single, array, fields methods to capture uploaded files in forms (upload. is the object here because we set upload to multer({}))
+// it will parse form data to req.body as usual, but will take any file upload and put it in req.file
 
 // details, update, delete specific doc
 router
