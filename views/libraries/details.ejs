@@ -6,7 +6,10 @@
 
     <div class="libDetailsContainer">
       <div>Submitted by <%= result.owner.username %> </div>
-      <img src="<%= result.image %> " class="detailsImage" />
+      <!-- TODO: image carousel and fix image on list page -->
+      <% for (let image of result.images) {%>
+      <img src="<%= image.url %> " class="detailsImage" />
+      <% } %>
       <div>Description: <%= result.description %></div>
       <div>Location: <%= result.location %></div>
       <div class="price">$<%= result.fee %></div>

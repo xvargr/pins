@@ -6,11 +6,12 @@ const Review = require("./reviews"); // import reviews schema
 const LibrarySchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  image: {
-    type: String,
-    required: false,
-    default: "https://via.placeholder.com/650x450",
-  },
+  images: [
+    {
+      url: String,
+      filename: String,
+    },
+  ],
   fee: { type: Number, required: true, min: 0 },
   location: { type: String, required: true },
   owner: {

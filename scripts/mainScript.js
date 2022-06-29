@@ -98,10 +98,8 @@ const validateForm = {
     const description = document.querySelector("#description");
     const location = document.querySelector("#location");
     const fee = document.querySelector("#fee");
-    // file section temporarily removed while figuring out how to store it
-    // const file = document.querySelector("#file");
-    // const fields = [name, description, location, fee, file];
-    const fields = [name, description, location, fee];
+    const img = document.querySelector("#img");
+    const fields = [name, description, location, fee, img];
     const formComplete = this.isRequired(fields);
     if (formComplete === false) {
       // console.log("---> client side form validation failed");
