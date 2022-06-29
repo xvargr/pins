@@ -10,20 +10,18 @@ const libraryController = require("../controllers/libraries");
 // imports middleware, checks for authentication
 const { isLoggedIn, isOwner, joiLibValidate } = require("../utils/middleware"); // import auth check middleware for routes
 
-// multer multipart form data parser import
+// multer multipart form data parser import, and cloudinary/cldStorage import from settings file
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { storage } = require("../cloudinary");
+const upload = multer({ storage }); // defining multer upload to storage, set up in cloudinary config
 
 // index page and post req
-router
-  .route("/")
-  .get(errorWrapper(libraryController.index))
-  // .post(joiLibValidate, isLoggedIn, errorWrapper(libraryController.newLibrary));
-  .post(upload.single("lib[img]"), (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
-    res.send("yo");
-  });
+router.route("/").get(errorWrapper(libraryController.index)).post(
+  isLoggedIn,
+  upload.array("lib[img]"), // upload multer cloud image middleware
+  joiLibValidate,
+  errorWrapper(libraryController.newLibrary)
+);
 
 // NOTE
 //; if get /:id is placed before /new, express will try to
@@ -40,8 +38,8 @@ router
   .route("/:id")
   .get(errorWrapper(libraryController.details))
   .post(
-    joiLibValidate,
     isLoggedIn,
+    joiLibValidate,
     isOwner,
     errorWrapper(libraryController.updateLibrary)
   )

@@ -44,8 +44,13 @@ module.exports.newLibrary = async function (req, res) {
   // res.send(req.body); //by default, req.body is empty, it needs to be parsed
   // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
   const lib = new Library(req.body.lib);
+  lib.images = req.files.map((file) => ({
+    url: file.path,
+    filename: file.filename,
+  })); // associate multer data into lib object
   lib.owner = req.user._id; // assigns the current logged in user as the owner of the new lib
   await lib.save();
+  // console.log(lib);
   flashMessage(req, "success", "successfully created new library");
   res.redirect(`/libraries/${lib._id}`);
 };
