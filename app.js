@@ -3,7 +3,8 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
   // .env files are hidden files where we store values that we want hidden
   // key value pairs in the file can be accessed without displaying the secret value in our code when we share or ship it
-  // console.log(process.env.SECRET);
+  // console.log(process.env.CLOUDINARY_KEY);
+  // console.log(process.env.CLOUDINARY_SECRET);
 }
 
 // npm init

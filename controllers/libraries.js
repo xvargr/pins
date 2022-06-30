@@ -30,6 +30,7 @@ module.exports.details = async function (req, res) {
   //   return res.redirect("libraries");
   // }
   // console.log(result.reviews);
+  // console.log(result);
   res.render("libraries/details", { result, req });
 };
 

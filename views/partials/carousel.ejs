@@ -1,0 +1,11 @@
+      <% if(result.images.length > 1) {%>
+      <% const length = result.images.length %>
+      <div class="carousel">
+        <button id="prev">&lt;</button>
+        <button id="next">&gt;</button>
+        <!-- TODO: image preload with multiple tags -->
+        <img src=<%= result.images[0].url %> alt="" id="img" class="carouselImage">
+      </div>
+      <% } else {%>
+      <img src=<%= result.images[0].url %> alt="" id="img" class="detailsImage">
+      <% } %>
