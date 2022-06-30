@@ -220,10 +220,52 @@ function serveAuthForm() {
   // });
 }
 
+function carousel() {
+  // only run on details page
+  // regex on every path might not be the most efficient way to do this check
+  // makes use of injected results variable from ejs to make an array of the urls
+  // console.log(resultExport);
+  // console.log(/libraries\/[\w\d]*$/m.test(window.location.pathname));
+  // console.log(document.querySelector("#prev") === null);
+  // if (/libraries\/[\w\d]*$/m.test(window.location.pathname)) {
+  if (document.querySelector("#prev") !== null) {
+    // console.log("carousel function ran");
+    const previous = document.querySelector("#prev");
+    const next = document.querySelector("#next");
+    const img = document.querySelector("#img");
+    const imgArray = resultExport.images.map((images) => images.url);
+    let index = 0; // keep track of position in carousel
+    // console.log(imgArray);
+
+    next.addEventListener("click", function () {
+      if (index === imgArray.length - 1) {
+        index = 0;
+      } else {
+        index++;
+      }
+      // console.log(index);
+      img.src = imgArray[index];
+      // console.log(img.src);
+    });
+
+    previous.addEventListener("click", function () {
+      if (index === 0) {
+        index = imgArray.length - 1;
+      } else {
+        index--;
+      }
+      // console.log(index);
+      img.src = imgArray[index];
+      // console.log(img.src);
+    });
+  }
+}
+
 // run these functions on every request
 function app() {
   navSlide();
   cardLink();
+  carousel();
   dismissMessage();
   serveAuthForm();
 }

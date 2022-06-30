@@ -8,7 +8,7 @@ const cities = require("./cities"); //import cities data
 const User = require("../../models/users");
 const ExpressError = require("../../utils/ExpressError");
 
-const size = 50;
+const size = 15;
 const maxPrice = 100;
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
@@ -48,7 +48,20 @@ async function seedDB() {
       name: `${pickOne(seedName.verbs)} ${pickOne(seedName.nouns)}`,
       description:
         "I used to practice weaving with spaghetti three hours a day but stopped because I didn't want to die alone.",
-      image: "https://via.placeholder.com/650x450",
+      images: [
+        {
+          url: "https://picsum.photos/600/900?random=1",
+          filename: "default",
+        },
+        {
+          url: "https://picsum.photos/600/900?random=2",
+          filename: "default",
+        },
+        {
+          url: "https://picsum.photos/600/900?random=3",
+          filename: "default",
+        },
+      ],
       fee: randomPrice(),
       location: `${pickOne(cities).city}, ${pickOne(cities).state}`,
       owner: `${owner._id}`,

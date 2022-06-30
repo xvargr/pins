@@ -1,15 +1,27 @@
 <!-- use ejs-mate /views/boilerplate layout -->
 <% layout("layouts/boilerplate") %>
+
+<% if (result) { %>
+
+<!-- inject variable directly to js file -->
+<!-- this makes the result variable available in the connected the file -->
+<script>
+  const resultExport = <%- JSON.stringify(result) %>; //converts a JavaScript object or value to a JSON string
+</script>
+<% } %>
+
 <main>
   <h1><%= result.name %></h1>
   <div class="mainDetailsContainer">
 
     <div class="libDetailsContainer">
       <div>Submitted by <%= result.owner.username %> </div>
+
       <!-- TODO: image carousel and fix image on list page -->
-      <% for (let image of result.images) {%>
-      <img src="<%= image.url %> " class="detailsImage" />
+      <% if (typeof result.images !== undefined  && result.images.length > 0) {%>
+      <%- include("../partials/carousel") %>
       <% } %>
+
       <div>Description: <%= result.description %></div>
       <div>Location: <%= result.location %></div>
       <div class="price">$<%= result.fee %></div>
@@ -24,6 +36,7 @@
     <div class="reviewsContainer">
       <div class="reviewsTitle">Reviews</div>
       <div class="reviewsList">
+        <% if (result.reviews.length > 0) {%>
         <% for (review of result.reviews) {  %>
         <div class="reviewItem">
           <div>
@@ -49,6 +62,9 @@
           </div>
           <% } %>
         </div>
+        <% } %>
+        <% } else {%>
+        No reviews yet
         <% } %>
 
       </div>

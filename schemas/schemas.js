@@ -19,5 +19,5 @@ module.exports.joiRevSchema = Joi.object({
     user: Joi.string(),
     text: Joi.string().required(),
     rating: Joi.number().required().min(1).max(5),
-  }).required(), // <-------- dont forget to make the main object required!
+  }).required(), // <-------- don't forget to make the main object required!
 });
