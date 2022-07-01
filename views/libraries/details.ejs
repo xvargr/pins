@@ -17,7 +17,6 @@
     <div class="libDetailsContainer">
       <div>Submitted by <%= result.owner.username %> </div>
 
-      <!-- TODO: image carousel and fix image on list page -->
       <% if (typeof result.images !== undefined  && result.images.length > 0) {%>
       <%- include("../partials/carousel") %>
       <% } %>
@@ -33,9 +32,9 @@
       </div>
     </div>
 
-    <div class="reviewsContainer">
+    <div class="reviewsContainer" <% if (!user) { %> style="justify-content: flex-start" <% } %>>
       <div class="reviewsTitle">Reviews</div>
-      <div class="reviewsList">
+      <div class="reviewsList" <% if (!user) { %> style="height: 100%" <% } %>>
         <% if (result.reviews.length > 0) {%>
         <% for (review of result.reviews) {  %>
         <div class="reviewItem">
@@ -51,7 +50,7 @@
             </span>
           </div>
           <div><%= review.text %> </div>
-          <% if (user && (user._id.valueOf() === review.owner._id.valueOf()) ) { %>
+          <% if (user && (user._id.valueOf() === review.owner._id.valueOf())) { %>
           <div>
             <form action="">
               <button>edit</button>

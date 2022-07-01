@@ -91,7 +91,7 @@ const validateForm = {
   },
   // most of these can be refactored, just accept id and validate fields
   // Specific edit form validation
-  library() {
+  library(ignore = []) {
     // console.log("---> client side edit form validation running");
     // selecting form elements
     const name = document.querySelector("#name");
@@ -100,6 +100,23 @@ const validateForm = {
     const fee = document.querySelector("#fee");
     const img = document.querySelector("#img");
     const fields = [name, description, location, fee, img];
+    // remove ignored fields from validation
+    if (ignore.length > 0) {
+      // TODO: remove item from field array based on ignore param,
+      // need to change keys in fields to string and compare with param, then remove
+      // its index on the fields array
+      const varToString = (varObj) => Object.keys(varObj)[0]; // returns key of variable as string
+      const fieldKeys = [];
+      // FIXME: field is not defined
+      fields.forEach(fieldKeys.push(varToString({ field })));
+      console.log(fieldKeys);
+
+      // for (let field of ignore) {
+      //   console.log(field);
+      //   fields.splice(indexOf(field), 1);
+      //   console.log(fields);
+      // }
+    }
     const formComplete = this.isRequired(fields);
     if (formComplete === false) {
       // console.log("---> client side form validation failed");
