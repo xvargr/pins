@@ -37,10 +37,11 @@ router.get("/new", isLoggedIn, libraryController.newForm);
 router
   .route("/:id")
   .get(errorWrapper(libraryController.details))
-  .post(
+  .patch(
     isLoggedIn,
-    joiLibValidate,
     isOwner,
+    upload.array("lib[img]"), // upload multer cloud image middleware
+    joiLibValidate,
     errorWrapper(libraryController.updateLibrary)
   )
   .delete(isLoggedIn, isOwner, errorWrapper(libraryController.deleteLibrary));

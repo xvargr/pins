@@ -57,22 +57,19 @@ module.exports.newLibrary = async function (req, res) {
 };
 
 module.exports.updateLibrary = async function (req, res) {
+  console.log("HERE");
   const { id } = req.params;
-  // await Library.findByIdAndUpdate(
-  //   id,
-  //   { ...req.body.lib },
-  //   { runValidators: true }
-  // ); //spread operator pass all elements of iterable lib
-  const lib = await Library.findById(id);
-  let reviews = lib.reviews; // keep reviews
-  // if current logged in user is not owner, flash and redirect, else proceed
-  // if (req.user._id.valueOf() !== lib.owner.valueOf()) {
-  //   flashMessage(req, "error", "You must be the owner to update");
-  //   return res.redirect(`/libraries/${id}`);
-  // }
-  lib.overwrite({ ...req.body.lib }, { runValidators: true });
+  const lib = await Library.findByIdAndUpdate(id, { ...req.body.lib }); //spread operator pass all elements of iterable lib
+  // const lib = await Library.findById(id);
+  // let reviews = lib.reviews; // keep reviews
+  // lib.overwrite({ ...req.body.lib }, { runValidators: true });
   lib.owner = req.user._id;
-  lib.reviews = reviews;
+  const imgArray = req.files.map((file) => ({
+    url: file.path,
+    filename: file.filename,
+  })); // associate multer data into lib object
+  lib.images.push(...imgArray);
+  // lib.reviews = reviews;
   await lib.save();
   flashMessage(req, "success", "successfully updated library");
   res.redirect(`/libraries/${id}`);

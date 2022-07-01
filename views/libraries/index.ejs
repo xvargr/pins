@@ -13,17 +13,8 @@
   <div class="columnContainer">
     <% for (let libs of result) { %>
     <div class="columnContent">
-      <!-- FIXME: image on index no longer work as it is now an array  -->
       <img src="<%= libs.images[0].url %> " alt="" class="indexImage" />
       <div>
-        <!-- hacky id as variable workaround -->
-        <!-- <a
-          href="/libraries/<%= libs._id %>"
-          class="indexTitle"
-          id="<%= libs.id %>"
-          ><%= libs.name %>
-        </a> -->
-
         <a href="/libraries/<%= libs._id %>" class="indexTitle"><%= libs.name %>
         </a>
         <ul class="indexInfo">

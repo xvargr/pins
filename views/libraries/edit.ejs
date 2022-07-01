@@ -4,7 +4,7 @@
 <main>
   <h1>Editing <%= result.name %></h1>
 
-  <form action="/libraries/<%= result._id %>?_method=put" method="post" class="editForm" enctype="multipart/form-data" onsubmit="return validateForm.library()">
+  <form action="/libraries/<%= result._id %>?_method=patch" method="post" class="editForm" enctype="multipart/form-data" onsubmit="event.preventDefault(); return validateForm.library(['img'])">
     <div>
       <label for="name">Name:</label>
       <input type="text" name="lib[name]" id="name" autocomplete="off" value="<%=result.name%>" />
@@ -23,7 +23,7 @@
     </div>
     <div>
       <label for="img">Upload image:</label>
-      <input type="file" name="lib[img]" id="img" multiple />
+      <input type="file" name="lib[img]" id="img" accept=".jpg,.jpeg,.png" multiple />
     </div>
     <button>Submit</button>
   </form>
