@@ -52,9 +52,9 @@
           <div><%= review.text %> </div>
           <% if (user && (user._id.valueOf() === review.owner._id.valueOf())) { %>
           <div>
-            <form action="">
+            <!-- <form action="">
               <button>edit</button>
-            </form>
+            </form> -->
             <form action="/libraries/<%= result._id %>/reviews/<%= review._id %>?_method=delete" method="post">
               <button>delete</button>
             </form>

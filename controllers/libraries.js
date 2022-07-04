@@ -4,6 +4,8 @@
 const Library = require("../models/libraries");
 // import flash for alert messages
 const flashMessage = require("../utils/flashMessage");
+// cloudinary import for deleting img
+const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async function (req, res) {
   const result = await Library.find({});
@@ -57,20 +59,25 @@ module.exports.newLibrary = async function (req, res) {
 };
 
 module.exports.updateLibrary = async function (req, res) {
-  console.log("HERE");
   const { id } = req.params;
   const lib = await Library.findByIdAndUpdate(id, { ...req.body.lib }); //spread operator pass all elements of iterable lib
-  // const lib = await Library.findById(id);
-  // let reviews = lib.reviews; // keep reviews
-  // lib.overwrite({ ...req.body.lib }, { runValidators: true });
   lib.owner = req.user._id;
   const imgArray = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
   })); // associate multer data into lib object
   lib.images.push(...imgArray);
-  // lib.reviews = reviews;
   await lib.save();
+  // remove image id from lib if there is one selected
+  if (req.body.delImg) {
+    for (let file of req.body.delImg) {
+      // console.log(file); // returns filepath?
+      await cloudinary.uploader.destroy(file); // apparently the filepath is also the public ID needed for cloudinary
+    }
+    await lib.updateOne({
+      $pull: { images: { filename: { $in: req.body.delImg } } },
+    });
+  }
   flashMessage(req, "success", "successfully updated library");
   res.redirect(`/libraries/${id}`);
 };

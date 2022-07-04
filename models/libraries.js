@@ -2,16 +2,21 @@ const mongoose = require("mongoose"); //import mongoose module to work with mong
 const Schema = mongoose.Schema; //maps Schema to mongoose.Schema as a shortcut
 const Review = require("./reviews"); // import reviews schema
 
+// nested schema, needed this to make a virtual .get for cloudinary image resizing
+const ImageSchema = new Schema({
+  url: String,
+  filename: String,
+});
+// virtual getter
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_400");
+});
+
 // define the schema for new library document
 const LibrarySchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
-  images: [
-    {
-      url: String,
-      filename: String,
-    },
-  ],
+  images: [ImageSchema],
   fee: { type: Number, required: true, min: 0 },
   location: { type: String, required: true },
   owner: {
