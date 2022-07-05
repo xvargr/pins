@@ -13,10 +13,16 @@
 
   <!-- CSS -->
   <base href="/" />
-  <link rel="stylesheet" type="text/css" href="styles/basicStyle.css" />
+  <link rel="stylesheet" type="text/css" href="/styles/basicStyle.css" />
 
   <% if(typeof err !== "undefined") {%>
-  <link rel="stylesheet" href="styles/errorStyle.css">
+  <link rel="stylesheet" href="/styles/errorStyle.css">
+  <% } %>
+
+  <!-- mapbox -->
+  <% if (typeof result.id !== undefined) {%>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js"></script>
   <% } %>
 
   <!-- FAVICON -->
@@ -30,21 +36,18 @@
   <% if(req.path === "/") {%>
   <%- include("../partials/banner") %>
   <% }  %>
-  <!-- banner here-->
+
   <%- include("../partials/navbar") %>
-  <!-- flash messages here -->
 
   <% if (status.length) {%>
   <%- include("../partials/flashMessage")%>
   <% } %>
 
-  <!-- navbar here -->
   <%- body %>
-  <!-- body here -->
 
   <%- include("../partials/footer") %>
 
-  <script src="scripts/mainScript.js"></script>
+  <script src="/scripts/mainScript.js"></script>
 </body>
 
 </html>

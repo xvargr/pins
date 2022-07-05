@@ -212,7 +212,7 @@ input:hover {
 }
 
 .price {
-  color: rgb(0, 121, 64);
+  color: rgb(0, 168, 90);
 }
 
 /* buttons */
@@ -791,9 +791,6 @@ button:hover,
   padding: 0.2rem;
   border-radius: 0.3rem;
 }
-/* .detailsContainer > :nth-child(odd) {
-  background-color: magenta;
-} */
 .libDetailsContainer > :nth-child(even) {
   background-color: rgb(82, 82, 82);
   /* border: 1px solid cyan; */
@@ -843,6 +840,21 @@ button:hover,
   /* for some reason here max height/width does bot work on objFit */
   object-fit: cover;
   border-radius: 0.3rem;
+}
+.locationDiv {
+  justify-content: space-between;
+}
+.mapButton {
+  padding: auto;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+.mapButton:hover {
+  cursor: pointer;
+  color: rgb(1, 167, 90);
+}
+#map {
+  height: 60%;
 }
 .hidden {
   display: none;

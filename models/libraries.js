@@ -19,6 +19,17 @@ const LibrarySchema = new Schema({
   images: [ImageSchema],
   fee: { type: Number, required: true, min: 0 },
   location: { type: String, required: true },
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
   owner: {
     // owner is a reference
     type: Schema.Types.ObjectId,

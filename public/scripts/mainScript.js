@@ -269,6 +269,18 @@ function carousel() {
   }
 }
 
+function showMap() {
+  const mapButton = document.querySelector(".mapButton");
+  if (mapButton !== null) {
+    const mapDiv = document.querySelector("#map");
+    const carousel = document.querySelector(".carousel");
+    mapButton.addEventListener("click", () => {
+      mapDiv.classList.toggle("hidden");
+      carousel.classList.toggle("hidden");
+    });
+  }
+}
+
 // run these functions on every request
 function app() {
   navSlide();
@@ -276,6 +288,7 @@ function app() {
   carousel();
   dismissMessage();
   serveAuthForm();
+  showMap();
 }
 
 app();

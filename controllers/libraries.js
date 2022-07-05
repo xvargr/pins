@@ -6,6 +6,10 @@ const Library = require("../models/libraries");
 const flashMessage = require("../utils/flashMessage");
 // cloudinary import for deleting img
 const { cloudinary } = require("../cloudinary");
+// mapboxSdk for geocoding
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapboxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapboxToken });
 
 module.exports.index = async function (req, res) {
   const result = await Library.find({});
@@ -43,15 +47,21 @@ module.exports.editForm = async function (req, res) {
 };
 
 module.exports.newLibrary = async function (req, res) {
-  // the error wrapper is used to wrap this function in a try catch to catch any async errors
-  // res.send(req.body); //by default, req.body is empty, it needs to be parsed
-  // if (!req.body.lib) throw new ExpressError("Form data is unavailable", 400); //if body.lib does not exist, throw this error // replaced with joi
+  const geoData = await geocoder // make a mapbox query
+    .forwardGeocode({
+      query: req.body.lib.location,
+      limit: 1,
+    })
+    .send();
+  // console.log(geoData.body.features[0].geometry.coordinates);
+
   const lib = new Library(req.body.lib);
   lib.images = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
   })); // associate multer data into lib object
   lib.owner = req.user._id; // assigns the current logged in user as the owner of the new lib
+  lib.geometry = geoData.body.features[0].geometry;
   await lib.save();
   // console.log(lib);
   flashMessage(req, "success", "successfully created new library");
@@ -81,6 +91,7 @@ module.exports.updateLibrary = async function (req, res) {
   flashMessage(req, "success", "successfully updated library");
   res.redirect(`/libraries/${id}`);
 };
+
 module.exports.deleteLibrary = async function (req, res) {
   const { id } = req.params;
   await Library.findByIdAndDelete(id);

@@ -18,7 +18,7 @@ const upload = multer({ storage }); // defining multer upload to storage, set up
 // index page and post req
 router.route("/").get(errorWrapper(libraryController.index)).post(
   isLoggedIn,
-  upload.array("lib[img]"), // upload multer cloud image middleware
+  upload.array("lib[img]"), // upload multer cloud image middleware // should be last, since it is possible to fail validation and still upload images
   joiLibValidate,
   errorWrapper(libraryController.newLibrary)
 );
