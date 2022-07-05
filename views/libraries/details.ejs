@@ -17,12 +17,17 @@
     <div class="libDetailsContainer">
       <div>Submitted by <%= result.owner.username %> </div>
 
+      <div id="map" class="hidden"></div>
+
       <% if (typeof result.images !== undefined  && result.images.length > 0) {%>
       <%- include("../partials/carousel") %>
       <% } %>
 
       <div>Description: <%= result.description %></div>
-      <div>Location: <%= result.location %></div>
+      <div class="locationDiv">
+        Location: <%= result.location %>
+        <span class="mapButton">VIEW</span>
+      </div>
       <div class="price">$<%= result.fee %></div>
       <div class="buttonContainer">
         <a class="anchorButton" href="/libraries">Back</a>
@@ -84,3 +89,9 @@
 
   </div>
 </main>
+
+<script>
+  const mapboxToken = "<%= process.env.MAPBOX_TOKEN %>"
+  const geometry = "<%= result.geometry %>"
+</script>
+<script src="/scripts/mapbox.js"></script>
