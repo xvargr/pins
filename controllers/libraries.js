@@ -70,8 +70,15 @@ module.exports.newLibrary = async function (req, res) {
 
 module.exports.updateLibrary = async function (req, res) {
   const { id } = req.params;
+  const geoData = await geocoder // make a mapbox query of new location
+    .forwardGeocode({
+      query: req.body.lib.location,
+      limit: 1,
+    })
+    .send();
   const lib = await Library.findByIdAndUpdate(id, { ...req.body.lib }); //spread operator pass all elements of iterable lib
   lib.owner = req.user._id;
+  lib.geometry = geoData.body.features[0].geometry;
   const imgArray = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,

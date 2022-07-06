@@ -64,6 +64,10 @@ async function seedDB() {
       ],
       fee: randomPrice(),
       location: `${pickOne(cities).city}, ${pickOne(cities).state}`,
+      geometry: {
+        type: "Point",
+        coordinates: [-80.2681751731831, 8.70473482400532],
+      },
       owner: `${owner._id}`,
       // reviews: [],
     });

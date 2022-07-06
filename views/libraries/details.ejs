@@ -92,6 +92,6 @@
 
 <script>
   const mapboxToken = "<%= process.env.MAPBOX_TOKEN %>"
-  const geometry = "<%= result.geometry %>"
+  const geometry = <%- JSON.stringify(result.geometry) %>
 </script>
-<script src="/scripts/mapbox.js"></script>
+<script src="/scripts/detailsMapbox.js"></script>
