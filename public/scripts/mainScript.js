@@ -163,7 +163,7 @@ function dismissMessage() {
   if (closeButton !== null) {
     // note to self, can't place event listener on objects for some reason
 
-    closeButton.addEventListener("click", function () {
+    function removeButton() {
       // some simple transition before removing element
       // avoiding animation keyframes by setting transition styling in js
       flashMessage.style.transition = "opacity 500ms ease";
@@ -172,7 +172,16 @@ function dismissMessage() {
       setTimeout(function () {
         flashMessage.closest("body").removeChild(flashMessage);
       }, 500);
-    });
+    }
+
+    // closeButton.addEventListener("click", removeButton()); // callback will trigger without input
+    // some weirdness about closures?? straight calling the function will always
+    // trigger the event listener without input, but calling removeButton with
+    // .bind or in another function will not. Do not understand this
+    closeButton.addEventListener("click", removeButton.bind(this));
+
+    // auto dismiss message after 5 sec
+    setTimeout(removeButton.bind(this), 5000); // same issue here
   }
 }
 
@@ -275,8 +284,15 @@ function showMap() {
     const mapDiv = document.querySelector("#map");
     const carousel = document.querySelector(".carousel");
     mapButton.addEventListener("click", () => {
+      // mapDiv.style.height = "60%";
+      // carousel.style.height = 0;
       mapDiv.classList.toggle("hidden");
       carousel.classList.toggle("hidden");
+      if (mapButton.innerText === "VIEW") {
+        mapButton.innerText = "HIDE";
+      } else {
+        mapButton.innerText = "VIEW";
+      }
     });
   }
 }

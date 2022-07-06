@@ -855,6 +855,7 @@ button:hover,
 }
 #map {
   height: 60%;
+  width: auto;
 }
 .hidden {
   display: none;
