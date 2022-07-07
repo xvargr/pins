@@ -133,31 +133,6 @@ font-family: 'Open Sans', sans-serif;
 font-family: 'Rubik', sans-serif;
 */
 
-/* Header with image */
-.mainTitle {
-  font-weight: bold;
-  font-style: italic;
-  font-size: 4rem;
-  text-transform: uppercase;
-  margin: 0;
-  color: rgb(255, 255, 255);
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 2rem;
-  transition: all 0.2s ease-in;
-}
-.mainHeader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40vh;
-  background: url("https://freestocks.org/fs/wp-content/uploads/2018/05/pile_of_books-1024x683.jpg");
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  z-index: 1;
-  transition: all 0.2s ease-in;
-}
-
 /* Basics */
 body {
   display: flex;
@@ -265,6 +240,15 @@ button:hover,
   background-color: rgb(39, 163, 105);
 }
 
+/* Header with image */
+.mainHeader {
+  height: 40vh;
+  position: relative;
+  z-index: 3;
+  /* transition: height 0.15s ease-out; */
+  /* FIXME: transition causes map to not size properly when window is resized quickly */
+}
+
 /* form */
 .editForm {
   padding: 1rem;
@@ -352,6 +336,7 @@ button:hover,
   position: sticky;
   top: 0px;
   height: 5.5vh;
+  z-index: 2;
 }
 .navbar a {
   color: rgb(255, 255, 255);
@@ -457,7 +442,8 @@ button:hover,
     width: 100%;
     background-color: rgb(0, 82, 44);
     transform: translateY(-15vh);
-    transition: all 0.25s ease-in 0.3s;
+    transition: all 0.15s ease-out 0.05s;
+    z-index: 2;
   }
   /* after hours of experimentation trying to get the .headerItems element 
   (which was originally a child of .mainHeader) to z-index behind .mainHeader, 
@@ -490,7 +476,7 @@ button:hover,
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 4;
 }
 .authContainer {
   display: flex;
@@ -865,7 +851,7 @@ button:hover,
 .flashMessage {
   position: fixed;
   width: 40vw;
-  z-index: 1;
+  z-index: 4;
   bottom: 3rem;
   right: 2rem;
   box-shadow: 0.5rem 0.5rem 1rem 0.2rem rgba(0, 0, 0, 0.473);

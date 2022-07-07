@@ -8,7 +8,7 @@ const cities = require("./cities"); //import cities data
 const User = require("../../models/users");
 const ExpressError = require("../../utils/ExpressError");
 
-const size = 15;
+const size = 50;
 const maxPrice = 100;
 
 mongoose.connect("mongodb://localhost:27017/libraries", {
@@ -42,6 +42,9 @@ async function seedDB() {
   await Library.deleteMany({}); //delete everything in the Library database
   for (let i = 0; i < size; i++) {
     const owner = await User.findOne({ username: `${defaultOwner}` });
+
+    const location = pickOne(cities);
+
     // console.log(owner._id); // for some reason if id was asked in the same line, it returns undefined, but on a different line it returns the id
 
     const lib = new Library({
@@ -63,10 +66,10 @@ async function seedDB() {
         },
       ],
       fee: randomPrice(),
-      location: `${pickOne(cities).city}, ${pickOne(cities).state}`,
+      location: `${location.city}, ${location.state}`,
       geometry: {
         type: "Point",
-        coordinates: [-80.2681751731831, 8.70473482400532],
+        coordinates: [location.longitude, location.latitude],
       },
       owner: `${owner._id}`,
       // reviews: [],
