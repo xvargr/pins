@@ -30,6 +30,8 @@
 
 <script>
   const mapboxToken = "<%= process.env.MAPBOX_TOKEN %>"
-  const geometry = null
+  const result = {
+    features: <%- JSON.stringify(result) %>
+  }
 </script>
 <script src="/scripts/indexMapbox.js"></script>

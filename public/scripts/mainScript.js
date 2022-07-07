@@ -3,7 +3,6 @@ function navSlide() {
   const burger = document.querySelector(".burger");
   const nav = document.querySelector(".mobileHeaderItems");
   const mainHeader = document.querySelector(".mainHeader");
-  const mainTitle = document.querySelector(".mainTitle");
 
   // add event to the burger which toggles visibility of menus
   burger.addEventListener("click", function () {
@@ -13,8 +12,12 @@ function navSlide() {
       window.location.pathname === "/libraries" ||
       window.location.pathname === "/libraries/"
     ) {
+      if (mainHeader.classList.contains("headerHidden")) {
+        mainHeader.style = "width: 100%; height: 40vh";
+      } else {
+        mainHeader.style = "width: 100%; height: 0";
+      }
       mainHeader.classList.toggle("headerHidden");
-      mainTitle.classList.toggle("titleHidden");
     }
   }); //toggle navbar menu
 }
