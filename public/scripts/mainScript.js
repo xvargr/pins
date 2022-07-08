@@ -13,9 +13,9 @@ function navSlide() {
       window.location.pathname === "/libraries/"
     ) {
       if (mainHeader.classList.contains("headerHidden")) {
-        mainHeader.style = "width: 100%; height: 40vh";
+        mainHeader.style = "";
       } else {
-        mainHeader.style = "width: 100%; height: 0";
+        mainHeader.style = "height: 0";
       }
       mainHeader.classList.toggle("headerHidden");
     }
@@ -284,7 +284,7 @@ function carousel() {
 function showMap() {
   const mapButton = document.querySelector(".mapButton");
   if (mapButton !== null) {
-    const mapDiv = document.querySelector("#map");
+    const mapDiv = document.querySelector("#detailsMap");
     const carousel = document.querySelector(".carousel");
     mapButton.addEventListener("click", () => {
       // mapDiv.style.height = "60%";
