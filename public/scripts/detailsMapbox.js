@@ -1,7 +1,7 @@
 mapboxgl.accessToken = mapboxToken;
 // TODO: dynamically pin and center to current lib
 const map = new mapboxgl.Map({
-  container: "map", // container ID
+  container: "detailsMap", // container ID
   style: "mapbox://styles/mapbox/dark-v10", // style URL
   center: geometry.coordinates, // starting position [lng, lat]
   zoom: 5, // starting zoom
@@ -25,7 +25,7 @@ window.onload = function () {
   // the map div is rendered hidden on load, so the canvas resets to 400x300
   // this forces the map to resize to the size of the div by quickly un-hiding and
   // resizing the div before hiding it again on page load
-  const mapDiv = document.querySelector("#map");
+  const mapDiv = document.querySelector("#detailsMap");
   const carousel = document.querySelector(".carousel");
 
   mapDiv.classList.toggle("hidden");

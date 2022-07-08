@@ -143,6 +143,10 @@ app.use("/libraries/:id/reviews", reviewRoutes); // for routes that starts with 
 app.use("/users", userRoutes);
 // params needs to be passed on the router file with mergeParams
 
+app.get("/", function (req, res) {
+  res.render("libraries/home"); // TODO: homepage
+});
+
 // serve static files
 app.use(express.static(path.join(__dirname, "public")));
 

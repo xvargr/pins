@@ -17,7 +17,7 @@
     <div class="libDetailsContainer">
       <div>Submitted by <%= result.owner.username %> </div>
 
-      <div id="map" class="hidden"></div>
+      <div id="detailsMap" class="hidden"></div>
 
       <% if (typeof result.images !== undefined  && result.images.length > 0) {%>
       <%- include("../partials/carousel") %>

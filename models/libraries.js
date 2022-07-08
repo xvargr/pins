@@ -13,37 +13,49 @@ ImageSchema.virtual("thumbnail").get(function () {
 });
 
 // define the schema for new library document
-const LibrarySchema = new Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  images: [ImageSchema],
-  fee: { type: Number, required: true, min: 0 },
-  location: { type: String, required: true },
-  geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      required: true,
+const opts = { toJSON: { virtuals: true } }; // by default when a doc is converted into json it will not include virtuals, the option to needs to be passed on to the schema
+const LibrarySchema = new Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    images: [ImageSchema],
+    fee: { type: Number, required: true, min: 0 },
+    location: { type: String, required: true },
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
-  },
-  owner: {
-    // owner is a reference
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  reviews: [
-    {
-      // this defines that the reviews key is a reference to another schema
-      // mongoose will only store the object id of connected reviews
-      // to populate it based on the ids stored use the populate method
+    owner: {
+      // owner is a reference
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "User",
     },
-  ],
+    reviews: [
+      {
+        // this defines that the reviews key is a reference to another schema
+        // mongoose will only store the object id of connected reviews
+        // to populate it based on the ids stored use the populate method
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+  },
+  opts
+);
+
+LibrarySchema.virtual("url").get(function () {
+  return `/libraries/${this.id}`;
+});
+LibrarySchema.virtual("properties.popupData").get(function () {
+  return `<a href="${this.url}" class="indexTitle">${this.name}</a>
+  <p>${this.description.substring(0, 60)}...</p>`;
 });
 
 // post middleware, not clear how this works, perhaps this middleware runs post (after) findOneAndDelete was run on a library document

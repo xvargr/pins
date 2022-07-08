@@ -1,6 +1,6 @@
 mapboxgl.accessToken = mapboxToken;
 const map = new mapboxgl.Map({
-  container: "map",
+  container: "indexMap",
   style: "mapbox://styles/mapbox/dark-v10",
   center: [-103.5917, 40.6699],
   zoom: 3,
@@ -12,8 +12,6 @@ map.on("load", () => {
   // add the point_count property to your source data.
   map.addSource("libs", {
     type: "geojson",
-    // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-    // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
     data: result,
     cluster: true,
     clusterMaxZoom: 14, // Max zoom to cluster points on
@@ -27,10 +25,6 @@ map.on("load", () => {
     filter: ["has", "point_count"],
     paint: {
       // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-      // with three steps to implement three types of circles:
-      //   * Blue, 20px circles when point count is less than 100
-      //   * Yellow, 30px circles when point count is between 100 and 750
-      //   * Pink, 40px circles when point count is greater than or equal to 750
       "circle-color": [
         "step",
         ["get", "point_count"],
@@ -92,8 +86,6 @@ map.on("load", () => {
   // description HTML from its properties.
   map.on("click", "unclustered-point", (e) => {
     const coordinates = e.features[0].geometry.coordinates.slice();
-    const mag = e.features[0].properties.mag;
-    const tsunami = e.features[0].properties.tsunami === 1 ? "yes" : "no";
 
     // Ensure that if the map is zoomed out such that
     // multiple copies of the feature are visible, the
@@ -104,7 +96,7 @@ map.on("load", () => {
 
     new mapboxgl.Popup()
       .setLngLat(coordinates)
-      .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`)
+      .setHTML(e.features[0].properties.popupData)
       .addTo(map);
   });
 
