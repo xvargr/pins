@@ -190,6 +190,31 @@ input:hover {
   color: rgb(0, 168, 90);
 }
 
+/* homepage */
+.homeOverlay {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.homeOverlay > div {
+  background-color: rgba(255, 0, 255, 0.322);
+  position: fixed;
+  top: 50vh;
+  left: 40vw;
+  font-size: 5rem;
+  font-family: "Open Sans", sans-serif;
+  font-weight: bold;
+  font: bold;
+}
+#homeMap {
+  height: 100vh;
+  width: 100vw;
+}
+
 /* buttons */
 .buttonContainer {
   display: flex;
