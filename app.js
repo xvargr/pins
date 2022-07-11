@@ -43,6 +43,7 @@ const ExpressError = require("./utils/ExpressError"); //import custom error clas
 const libraryRoutes = require("./routes/libraries");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/users");
+const libraries = require("./models/libraries");
 // const { compile } = require("joi");
 
 //connect mongoose to mongodb at this directory
@@ -143,8 +144,9 @@ app.use("/libraries/:id/reviews", reviewRoutes); // for routes that starts with 
 app.use("/users", userRoutes);
 // params needs to be passed on the router file with mergeParams
 
-app.get("/", function (req, res) {
-  res.render("libraries/home"); // TODO: homepage
+app.get("/", async function (req, res) {
+  const result = await libraries.find();
+  res.render("libraries/home", { result }); // TODO: homepage
 });
 
 // serve static files
