@@ -302,12 +302,14 @@ function showMap() {
 
 // run these functions on every request
 function app() {
-  navSlide();
-  cardLink();
-  carousel();
+  if (window.location.pathname !== "/") {
+    navSlide();
+    cardLink();
+    carousel();
+    serveAuthForm();
+    showMap();
+  }
   dismissMessage();
-  serveAuthForm();
-  showMap();
 }
 
 app();

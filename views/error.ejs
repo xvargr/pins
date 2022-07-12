@@ -5,6 +5,9 @@
     <span class="errorCode"><%= status %> </span>
     <div class="errorDivider"></div>
     <span class="errorMessage"><%= message %></span>
-    <!-- <span class="errorMessage"><%= err.stack %></span> -->
+    <% if (process.env.NODE_ENV !== "production") { %>
+    <!-- don't display error stack outside of development -->
+    <span class="errorMessage"><%= err.stack %></span>
+    <% } %>
   </div>
 </main>

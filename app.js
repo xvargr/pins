@@ -39,6 +39,10 @@ const ExpressError = require("./utils/ExpressError"); //import custom error clas
 // const res = require("express/lib/response");
 // const { populate } = require("./models/libraries"); // populate not used right now
 
+const mongoSanitize = require("express-mongo-sanitize");
+
+const helmet = require("helmet");
+
 // router imports, for compartmentalizing routes
 const libraryRoutes = require("./routes/libraries");
 const reviewRoutes = require("./routes/reviews");
@@ -70,11 +74,13 @@ app.listen(port, function () {
 
 // session and cookie
 const sessionConfig = {
+  name: "libCookie",
   secret: "libsAreSecretlyGood",
   resave: false,
   saveUninitialized: true,
   cookie: {
-    httpOnly: true,
+    httpOnly: true, // set cookies to only be accessible through http, not js, security measure
+    // secure: true, // set cookie to only be accessible through https
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // js millisecond based time
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
@@ -85,6 +91,63 @@ app.use(session(sessionConfig));
 app.use(express.urlencoded({ extended: true })); //express middleware body parser
 app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
 
+// FIXME: map and images refuse to load following content security policy directive
+// helmet header attack protection
+const scriptSrcUrls = [
+  "https://stackpath.bootstrapcdn.com/",
+  "https://api.tiles.mapbox.com/",
+  "https://api.mapbox.com/",
+  "https://kit.fontawesome.com/",
+  "https://cdnjs.cloudflare.com/",
+  "https://cdn.jsdelivr.net",
+];
+const styleSrcUrls = [
+  // "https://kit-free.fontawesome.com/",
+  // "https://stackpath.bootstrapcdn.com/",
+  "https://api.mapbox.com/",
+  "https://api.tiles.mapbox.com/",
+  "https://fonts.googleapis.com/",
+  "mapbox://styles/mapbox/dark-v10",
+  // "https://use.fontawesome.com/",
+];
+const connectSrcUrls = [
+  "https://api.mapbox.com/",
+  "https://a.tiles.mapbox.com/",
+  "https://b.tiles.mapbox.com/",
+  "https://events.mapbox.com/",
+];
+const fontSrcUrls = [
+  "https://fonts.googleapis.com",
+  "https://fonts.gstatic.com",
+];
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https://res.cloudinary.com/dndf29tdn/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
+        "https://images.unsplash.com/",
+        "https://picsum.photos/",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
+
+app.use(mongoSanitize()); // sanitizes req.query, req.params, and req.body from query injection
+// use mongoSanitize({replaceWith:"_"}) to replace prohibited characters instead of removing them
+
+// serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
 // flash messages and variable reassignment middleware using locals and sessions
 app.use(flash()); // innit flash, now all req objects have a method called flash("key", "message")
 app.use(function (req, res, next) {
@@ -94,6 +157,7 @@ app.use(function (req, res, next) {
   // console.log(req.session);
   // console.log("locals");
   // console.log(res.locals);
+  // console.log(req.query);
 
   // passport error special case
   const passportFlash = req.flash("error");
@@ -133,6 +197,7 @@ passport.deserializeUser(User.deserializeUser()); // use this method to deserial
 // pass on user info to locals
 app.use(function (req, res, next) {
   res.locals.user = req.user; // user data, else undefined if not logged in
+  // console.log(req.path);
   // console.log("/// USER ///");
   // console.log(req.user);
   next();
@@ -148,9 +213,6 @@ app.get("/", async function (req, res) {
   const result = await libraries.find();
   res.render("libraries/home", { result }); // TODO: homepage
 });
-
-// serve static files
-app.use(express.static(path.join(__dirname, "public")));
 
 // 404 catch
 app.all("*", function (req, res, next) {

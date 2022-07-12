@@ -4,8 +4,8 @@
         <button id="prev">&lt;</button>
         <button id="next">&gt;</button>
         <!-- TODO: image preload with multiple tags -->
-        <img src=<%= result.images[0].url %> alt="" id="img" class="carouselImage">
+        <img src=<%= result.images[0].url %> alt="" id="img" class="carouselImage" crossorigin="anonymous">
       </div>
       <% } else {%>
-      <img src=<%= result.images[0].url %> alt="" id="img" class="detailsImage">
+      <img src=<%= result.images[0].url %> alt="" id="img" class="detailsImage carousel" crossorigin="anonymous">
       <% } %>
