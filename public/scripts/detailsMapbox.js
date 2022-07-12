@@ -1,5 +1,4 @@
 mapboxgl.accessToken = mapboxToken;
-// TODO: dynamically pin and center to current lib
 const map = new mapboxgl.Map({
   container: "detailsMap", // container ID
   style: "mapbox://styles/mapbox/dark-v10", // style URL

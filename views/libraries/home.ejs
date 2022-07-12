@@ -27,8 +27,27 @@
 </head>
 
 <body>
+  <% if (status.length) {%>
+  <%- include("../partials/flashMessage")%>
+  <% } %>
+
+  <% if ( user ) {%>
+  <meta http-equiv="refresh" content="2; url = /libraries" />
+  <% } %>
   <div class="homeOverlay">
-    <div>/LIBS</div>
+    <form action="/users/login" method="post" onsubmit="return validateForm.user()">
+      <div id="homeTitle">/LIBS</div>
+      <% if ( !user ) {%>
+      <input type="text" name="username" placeholder="Username" id="username">
+      <input type="password" name="password" placeholder="Password" id="password">
+      <input type="submit" hidden>
+      <a href="/libraries">skip login</a>
+      <% } else { %>
+      <div>please wait...</div>
+      <meta http-equiv="refresh" content="2; url = /libraries" />
+      <% } %>
+
+    </form>
   </div>
   <div id="homeMap"></div>
   <script>
@@ -38,6 +57,7 @@
     }
   </script>
   <script src="/scripts/homeMap.js"></script>
+  <script src="/scripts/mainScript.js"></script>
 </body>
 
 </html>
