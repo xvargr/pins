@@ -11,6 +11,7 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express"); //import the express npm module for easy server setup
 const app = express(); //mapping express to app
 const session = require("express-session"); // impost session module
+const MongoStore = require("connect-mongo"); // session storage using mongo
 
 const flash = require("connect-flash"); // import flash for alert messages
 
@@ -51,7 +52,10 @@ const libraries = require("./models/libraries");
 // const { compile } = require("joi");
 
 //connect mongoose to mongodb at this directory
-mongoose.connect("mongodb://localhost:27017/libraries", {
+// ATLAS PW lRqTkyrXt3DbXtRs; admin
+const localUrl = "mongodb://localhost:27017/libraries";
+const atlasUrl = process.env.ATLAS_URL;
+mongoose.connect(localUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -73,11 +77,24 @@ app.listen(port, function () {
 });
 
 // session and cookie
+// const store = new MongoStore({
+//   url: localUrl,
+//   secret: "libsAreSecretlyGood",
+//   touchAfter: 24 * 60 * 60, // lazy update, only update after certain time if no changes, reduces unnecessary updates and bandwidth use
+// });
+// store.on("error", function (e) {
+//   console.log("!--> STORE ERROR", e);
+// });
 const sessionConfig = {
   name: "libCookie",
   secret: "libsAreSecretlyGood",
   resave: false,
   saveUninitialized: true,
+  store: new MongoStore({
+    mongoUrl: localUrl,
+    secret: "libsAreSecretlyGood",
+    touchAfter: 24 * 60 * 60, // lazy update, only update after certain time if no changes, reduces unnecessary updates and bandwidth use
+  }),
   cookie: {
     httpOnly: true, // set cookies to only be accessible through http, not js, security measure
     // secure: true, // set cookie to only be accessible through https
@@ -94,10 +111,10 @@ app.use(express.static(__dirname + "/")); //serve static files at "/" directory 
 // FIXME: map and images refuse to load following content security policy directive
 // helmet header attack protection
 const scriptSrcUrls = [
-  "https://stackpath.bootstrapcdn.com/",
+  // "https://stackpath.bootstrapcdn.com/",
   "https://api.tiles.mapbox.com/",
   "https://api.mapbox.com/",
-  "https://kit.fontawesome.com/",
+  // "https://kit.fontawesome.com/",
   "https://cdnjs.cloudflare.com/",
   "https://cdn.jsdelivr.net",
 ];
@@ -121,9 +138,13 @@ const fontSrcUrls = [
   "https://fonts.gstatic.com",
 ];
 app.use(
+  // helmet({
+  //   crossOriginEmbedderPolicy: false,
+  //   crossOriginResourcePolicy: { policy: "cross-origin" },
+  // }),
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: [],
+      defaultSrc: ["'self'", "https://*.mapbox.com"],
       connectSrc: ["'self'", ...connectSrcUrls],
       scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
       styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
@@ -134,7 +155,8 @@ app.use(
         "blob:",
         "data:",
         "https://res.cloudinary.com/dndf29tdn/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
-        "https://images.unsplash.com/",
+        // "https://images.unsplash.com/",
+        "https://i.picsum.photos/",
         "https://picsum.photos/",
       ],
       fontSrc: ["'self'", ...fontSrcUrls],
@@ -211,6 +233,10 @@ app.use("/users", userRoutes);
 
 app.get("/", async function (req, res) {
   const result = await libraries.find();
+  // res.set(
+  //   "Content-Security-Policy",
+  //   "default-src 'self' https://*.mapbox.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;"
+  // );
   res.render("libraries/home", { result }); // TODO: homepage
 });
 
