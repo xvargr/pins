@@ -11,9 +11,12 @@
 <main>
   <h1>Showing all libraries</h1>
   <div class="columnContainer">
+    <% if(result.length < 1) { %>
+    <p>No items yet, <a href="/libraries/new">Create a new one!</a></p>
+    <% } %>
     <% for (let libs of result) { %>
     <div class="columnContent">
-      <img src="<%= libs.images[0].url %> " alt="" class="indexImage" />
+      <img src="<%= libs.images[0].url %> " alt="" class="indexImage" crossorigin="anonymous" />
       <div>
         <a href="/libraries/<%= libs._id %>" class="indexTitle"><%= libs.name %>
         </a>
