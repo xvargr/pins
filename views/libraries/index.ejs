@@ -17,14 +17,14 @@
     <% for (let libs of result) { %>
     <div class="columnContent">
       <img src="<%= libs.images[0].url %> " alt="" class="indexImage" crossorigin="anonymous" />
-      <div>
+      <div class="indexInfo">
         <a href="/libraries/<%= libs._id %>" class="indexTitle"><%= libs.name %>
         </a>
-        <ul class="indexInfo">
-          <li><%= libs.description %></li>
-          <li><%= libs.location %></li>
-          <li class="price">$<%= libs.fee %></li>
-        </ul>
+        <span><%= libs.description %></span>
+        <div>
+          <div><%= libs.location %></div>
+          <div class="price">$<%= libs.fee %></div>
+        </div>
       </div>
     </div>
     <% } %>

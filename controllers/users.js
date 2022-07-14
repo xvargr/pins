@@ -1,7 +1,6 @@
 // controller file where the logic lives
 
 //model imports
-const { session } = require("passport");
 const User = require("../models/users");
 
 // import flash for alert messages
