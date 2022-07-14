@@ -12,10 +12,19 @@ function navSlide() {
       window.location.pathname === "/libraries" ||
       window.location.pathname === "/libraries/"
     ) {
+      // big hassle, map wont scale correctly if transitions are applied
       if (mainHeader.classList.contains("headerHidden")) {
+        mainHeader.classList.toggle("transitionTrue");
         mainHeader.style = "";
+        setTimeout(function () {
+          mainHeader.classList.toggle("transitionTrue");
+        }, 150);
       } else {
+        mainHeader.classList.toggle("transitionTrue");
         mainHeader.style = "height: 0";
+        setTimeout(function () {
+          mainHeader.classList.toggle("transitionTrue");
+        }, 150);
       }
       mainHeader.classList.toggle("headerHidden");
     }
@@ -105,6 +114,7 @@ const validateForm = {
     const fields = [name, description, location, fee, img];
 
     // remove ignored fields from validation
+    // legacy, as onsubmit is not allowed by content security policy
     if (ignore.length > 0) {
       const fieldKeys = [];
       fields.forEach((field) => fieldKeys.push(field.getAttribute("id"))); // make new array of keys from fields, acts as 1 to 1 index for string comparison
@@ -156,6 +166,33 @@ const validateForm = {
   },
   // IDEA - make a function which accepts args that are the names, id, class of the elements that needs to be verified and do so
 };
+
+// content security policy directive - no inline event workaround for form validation
+// inline ver onsubmit="return validateForm.library(['img'])
+function attachValidator() {
+  // console.log(typeof document.querySelector("video") !== null);
+  if (typeof document.querySelector("form") !== null) {
+    const forms = document.querySelectorAll("form");
+    // console.log(typeof form);
+    // console.log(Object.entries(form));
+    Object.entries(forms).forEach(function (form) {
+      // dataset weirdness, changes the attribute name >:(
+      console.log(form[1].dataset.formType);
+      // let hey = form[1].dataset.formType;
+      // console.log(hey);
+      // form[1].style.backgroundColor = "magenta";
+      form[1].addEventListener("submit", function (e) {
+        // TODO: form submit function
+        e.preventDefault();
+        console.log(`${form[1].dataset.formType} form clicked`);
+        // return false;
+      });
+    });
+    // object.forEach.addEventListener("click", function () {
+    //   console.log("click");
+    // });
+  }
+}
 
 // basic functionality to the flash messages, close button
 // TODO add failure
@@ -302,6 +339,7 @@ function showMap() {
 
 // run these functions on every request
 function app() {
+  // not on home page
   if (window.location.pathname !== "/") {
     navSlide();
     cardLink();
@@ -309,6 +347,8 @@ function app() {
     serveAuthForm();
     showMap();
   }
+  // everywhere
+  attachValidator();
   dismissMessage();
 }
 

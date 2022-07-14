@@ -353,11 +353,11 @@ button:hover,
 /* I think this is a very good styling method, easily applied to other forms */
 .formValidationFailed {
   /* border-color: rgb(221, 68, 68); */
-  box-shadow: 0px 0px 1px 1px rgba(255, 0, 0, 0.808) inset;
+  box-shadow: 0px 0px 1px 1px rgba(255, 0, 0, 0.8) inset;
 }
 .formValidationPassed {
   /* border-color: rgb(88, 192, 88); */
-  box-shadow: 0px 0px 1px 1px rgba(11, 187, 11, 0.808) inset;
+  box-shadow: 0px 0px 1px 1px rgba(11, 187, 11, 0.8) inset;
 }
 .formValidationFailed::placeholder {
   color: rgb(212, 33, 33);
@@ -367,13 +367,13 @@ button:hover,
 /* navbar */
 .navbar {
   display: flex;
-  max-height: 3rem;
+  /* max-height: 3rem; */
   justify-content: space-between;
   align-items: center;
   background-color: rgb(0, 121, 64);
   position: sticky;
   top: 0px;
-  height: 5.5vh;
+  height: 2.5rem;
   z-index: 2;
 }
 .navbar a {
@@ -433,7 +433,7 @@ button:hover,
   background-color: rgb(88, 88, 88);
 }
 .navbarRightCluster > form {
-  margin: 0;
+  margin-right: 1rem;
   padding: 0;
 }
 .burger {
@@ -484,6 +484,11 @@ button:hover,
     /* TODO: needs better transition */
     z-index: 2;
   }
+
+  .navbar > .navbarRightCluster > form {
+    margin-right: 0;
+  }
+
   /* after hours of experimentation trying to get the .headerItems element 
   (which was originally a child of .mainHeader) to z-index behind .mainHeader, 
   I learned that a child element cannot ever escape the z-index of the parent 
@@ -624,8 +629,24 @@ button:hover,
   box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.473);
   background-color: rgb(47, 65, 47);
 }
-.columnContent > div {
+.columnContent > .indexInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   margin: 0.5rem;
+  height: 90%;
+  font-size: 90%;
+  text-overflow: ellipsis;
+}
+.columnContent > .indexInfo > div:last-of-type > div:first-of-type {
+  margin-bottom: 0.5rem;
+}
+.indexInfo > span {
+  max-height: 40%;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* white-space: nowrap; */
 }
 
 .indexImage {
@@ -641,34 +662,13 @@ button:hover,
   margin: 0;
 }
 
-.indexInfo {
-  font-size: 90%;
-  text-overflow: ellipsis;
-}
-
 #indexMap {
   width: 100%;
   height: 40vh;
 }
-
-/* .indexInfo {
-  font-size: 70%;
-} */
-
-/* @media (max-width: 900px) {
-  .columnContainer {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-  }
-  .columnContent {
-    max-width: 45%;
-    margin: 0.5rem;
-  }
-  .indexImage {
-    max-width: 40%;
-  }
-} */
+.transitionTrue {
+  transition: height 0.15s ease-in;
+}
 
 @media (max-width: 1100px) {
   /* .columnContainer {
@@ -851,6 +851,14 @@ button:hover,
 .libDetailsContainer > :nth-child(odd) {
   background-color: rgb(56, 56, 56);
   /* border: 1px solid rgb(89, 0, 255); */
+}
+.description {
+  max-height: 5rem;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: scroll;
+  overflow-x: hidden;
+  /* white-space: nowrap; */
 }
 .detailsImage {
   display: block;

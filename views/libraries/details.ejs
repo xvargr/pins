@@ -23,7 +23,7 @@
       <%- include("../partials/carousel") %>
       <% } %>
 
-      <div>Description: <%= result.description %></div>
+      <div class="description">Description: <%= result.description %></div>
       <div class="locationDiv">
         Location: <%= result.location %>
         <span class="mapButton">VIEW</span>
@@ -73,7 +73,7 @@
 
       </div>
       <% if ( user ) {%>
-      <form action="libraries/<%= result.id %>/reviews" method="post" onsubmit="return validateForm.review()">
+      <form action="libraries/<%= result.id %>/reviews" method="post" data-form-type="newReview">
         <div>Leave a review</div>
         <textarea name="review[text]" id="review"></textarea>
         <div class="starRate">

@@ -3,7 +3,7 @@
 <main>
   <h1>Report new library</h1>
 
-  <form action="/libraries" class="editForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm.library()">
+  <form action="/libraries" class="editForm" method="post" enctype="multipart/form-data" data-form-type="newStuff">
     <div>
       <label for="name">Name:</label>
       <input type="text" name="lib[name]" id="name" autocomplete="off" />
