@@ -73,7 +73,7 @@
 
       </div>
       <% if ( user ) {%>
-      <form action="libraries/<%= result.id %>/reviews" method="post" data-form-type="newReview">
+      <form action="libraries/<%= result.id %>/reviews" method="post" data-form-type="review">
         <div>Leave a review</div>
         <textarea name="review[text]" id="review"></textarea>
         <div class="starRate">
