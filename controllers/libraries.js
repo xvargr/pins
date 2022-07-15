@@ -101,6 +101,10 @@ module.exports.updateLibrary = async function (req, res) {
 
 module.exports.deleteLibrary = async function (req, res) {
   const { id } = req.params;
+  const lib = await Library.findById(id);
+  const imgArray = lib.images.map((img) => img.filename);
+  // console.log(imgArray);
+  imgArray.forEach(async (img) => await cloudinary.uploader.destroy(img));
   await Library.findByIdAndDelete(id);
   flashMessage(req, "success", "successfully deleted library");
   res.redirect("/libraries");

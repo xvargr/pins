@@ -141,7 +141,7 @@ const validateForm = {
     // console.log("---> client side form validation passed");
   },
   // login form validation
-  user() {
+  login() {
     const username = document.querySelector("#username");
     const password = document.querySelector("#password");
     const fields = [username, password];
@@ -152,7 +152,7 @@ const validateForm = {
     }
     // console.log("---> client side form validation passed");
   },
-  newUser() {
+  register() {
     const username = document.querySelector("#newUsername");
     const email = document.querySelector("#newEmail");
     const password = document.querySelector("#newPassword");
@@ -173,24 +173,40 @@ function attachValidator() {
   // console.log(typeof document.querySelector("video") !== null);
   if (typeof document.querySelector("form") !== null) {
     const forms = document.querySelectorAll("form");
-    // console.log(typeof form);
-    // console.log(Object.entries(form));
+
     Object.entries(forms).forEach(function (form) {
       // dataset weirdness, changes the attribute name >:(
-      console.log(form[1].dataset.formType);
-      // let hey = form[1].dataset.formType;
-      // console.log(hey);
-      // form[1].style.backgroundColor = "magenta";
       form[1].addEventListener("submit", function (e) {
-        // TODO: form submit function
-        e.preventDefault();
-        console.log(`${form[1].dataset.formType} form clicked`);
-        // return false;
+        let ignore = [e.target.dataset.ignore];
+        ignore = ignore.filter((e) => e !== undefined);
+
+        // not elegant, repeated code
+        switch (e.target.dataset.formType) {
+          case "login":
+            if (validateForm.login() === false) {
+              e.preventDefault();
+            }
+            break;
+          case "register":
+            if (validateForm.register() === false) {
+              e.preventDefault();
+            }
+            break;
+          case "review":
+            if (validateForm.review() === false) {
+              e.preventDefault();
+            }
+            break;
+          case "library":
+            if (validateForm.library(ignore) === false) {
+              e.preventDefault();
+            }
+            break;
+          default:
+            break;
+        }
       });
     });
-    // object.forEach.addEventListener("click", function () {
-    //   console.log("click");
-    // });
   }
 }
 

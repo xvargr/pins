@@ -52,10 +52,8 @@ const libraries = require("./models/libraries");
 // const { compile } = require("joi");
 
 //connect mongoose to mongodb at this directory
-// ATLAS PW lRqTkyrXt3DbXtRs; admin
-const localUrl = "mongodb://localhost:27017/libraries";
-const atlasUrl = process.env.ATLAS_URL;
-mongoose.connect(localUrl, {
+const dbUrl = process.env.ATLAS_URL || "mongodb://localhost:27017/libraries";
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -77,22 +75,15 @@ app.listen(port, function () {
 });
 
 // session and cookie
-// const store = new MongoStore({
-//   url: localUrl,
-//   secret: "libsAreSecretlyGood",
-//   touchAfter: 24 * 60 * 60, // lazy update, only update after certain time if no changes, reduces unnecessary updates and bandwidth use
-// });
-// store.on("error", function (e) {
-//   console.log("!--> STORE ERROR", e);
-// });
+const secret = process.env.SECRET || "libsAreSecretlyGood";
 const sessionConfig = {
   name: "libCookie",
-  secret: "libsAreSecretlyGood",
+  secret,
   resave: false,
   saveUninitialized: true,
   store: new MongoStore({
-    mongoUrl: localUrl,
-    secret: "libsAreSecretlyGood",
+    mongoUrl: dbUrl,
+    secret,
     touchAfter: 24 * 60 * 60, // lazy update, only update after certain time if no changes, reduces unnecessary updates and bandwidth use
   }),
   cookie: {
@@ -111,21 +102,16 @@ app.use(express.static(__dirname + "/")); //serve static files at "/" directory 
 // FIXME: map and images refuse to load following content security policy directive
 // helmet header attack protection
 const scriptSrcUrls = [
-  // "https://stackpath.bootstrapcdn.com/",
   "https://api.tiles.mapbox.com/",
   "https://api.mapbox.com/",
-  // "https://kit.fontawesome.com/",
   "https://cdnjs.cloudflare.com/",
   "https://cdn.jsdelivr.net",
 ];
 const styleSrcUrls = [
-  // "https://kit-free.fontawesome.com/",
-  // "https://stackpath.bootstrapcdn.com/",
   "https://api.mapbox.com/",
   "https://api.tiles.mapbox.com/",
   "https://fonts.googleapis.com/",
   "mapbox://styles/mapbox/dark-v10",
-  // "https://use.fontawesome.com/",
 ];
 const connectSrcUrls = [
   "https://api.mapbox.com/",
@@ -138,10 +124,6 @@ const fontSrcUrls = [
   "https://fonts.gstatic.com",
 ];
 app.use(
-  // helmet({
-  //   crossOriginEmbedderPolicy: false,
-  //   crossOriginResourcePolicy: { policy: "cross-origin" },
-  // }),
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'", "https://*.mapbox.com"],
@@ -155,7 +137,6 @@ app.use(
         "blob:",
         "data:",
         "https://res.cloudinary.com/dndf29tdn/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
-        // "https://images.unsplash.com/",
         "https://i.picsum.photos/",
         "https://picsum.photos/",
       ],
