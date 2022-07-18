@@ -68,7 +68,7 @@ db.once("open", function () {
 }); //once mongo is connected
 
 //express start server
-const port = 3000; //set listening port to this
+const port = process.env.PORT || 3000; //set listening port to this, heroku default 80, 3000 for local
 app.listen(port, function () {
   console.log("---> App started");
   console.log(`---> Listening on port ${port}`);
