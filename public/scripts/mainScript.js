@@ -57,14 +57,21 @@ function navSlide() {
 // new cardLink which uses resultExport variable passed in object
 function cardLink() {
   //if current page is the index page
-  if (window.location.pathname.indexOf("libraries") !== -1) {
-    const columnContent = document.getElementsByClassName("columnContent"); //select content container
+  if (document.querySelector(".columnContent") !== null) {
+    const columnContent = document.getElementsByClassName("idTrue"); // bodge, to exclude last item in columnContent
+
     for (let card of columnContent) {
       card.addEventListener("click", function () {
         let index = Array.from(columnContent).indexOf(card); //make array from columnContent, then get the current index of card
         window.location = `/libraries/${resultExport[index]._id}`; //set the event listener link to the id of that index from imported data object
       });
     }
+
+    const makeNew = document.querySelector(".columnContent:last-of-type");
+    // makeNew.removeEventListener("click"); //
+    makeNew.addEventListener("click", () => {
+      window.location = "/libraries/new";
+    });
   }
 }
 
