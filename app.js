@@ -99,7 +99,6 @@ app.use(session(sessionConfig));
 app.use(express.urlencoded({ extended: true })); //express middleware body parser
 app.use(express.static(__dirname + "/")); //serve static files at "/" directory with express
 
-// FIXME: map and images refuse to load following content security policy directive
 // helmet header attack protection
 const scriptSrcUrls = [
   "https://api.tiles.mapbox.com/",
