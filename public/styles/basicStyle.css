@@ -513,10 +513,13 @@ button:hover,
   }
   .mainDetailsContainer > .libDetailsContainer > .carousel,
   .mainDetailsContainer > .libDetailsContainer > #detailsMap {
-    height: 30rem;
+    height: 30vh;
   }
   .mainDetailsContainer > .reviewsContainer > .reviewsList {
-    height: 20rem;
+    height: 20vh;
+  }
+  h1 {
+    font-size: 2.5rem;
   }
 }
 
