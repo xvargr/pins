@@ -68,7 +68,11 @@
         </div>
         <% } %>
         <% } else {%>
+        <% if(user) { %>
         No reviews yet
+        <% } else { %>
+        No reviews yet, log in to leave one
+        <% } %>
         <% } %>
 
       </div>

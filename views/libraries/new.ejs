@@ -1,7 +1,7 @@
 <!-- use ejs-mate /views/boilerplate layout -->
 <% layout("layouts/boilerplate") %>
 <main>
-  <h1>Report new library</h1>
+  <h1>Report new thing</h1>
 
   <form action="/libraries" class="editForm" method="post" enctype="multipart/form-data" data-form-type="library">
     <div>
@@ -25,7 +25,7 @@
       <input type="file" name="lib[img]" id="img" accept=".jpg,.jpeg,.png" multiple />
     </div>
     <div>
-      <button>Create new library</button>
+      <button>Submit</button>
       <a href="/libraries" class="anchorButton">Back</a>
     </div>
   </form>

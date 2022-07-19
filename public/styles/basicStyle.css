@@ -254,7 +254,6 @@ button,
 button:hover,
 .anchorButton:hover {
   background-color: rgb(39, 163, 105);
-  color: black;
 }
 
 /* Scrollbar */
@@ -975,4 +974,25 @@ button:hover,
 }
 .error {
   background-color: rgb(180, 44, 44);
+}
+
+/* mapbox styles */
+#indexMap .mapboxgl-popup-content {
+  background-color: rgb(43, 43, 43);
+}
+#indexMap .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: rgb(43, 43, 43);
+}
+#indexMap .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: rgb(43, 43, 43);
+}
+#indexMap .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+#indexMap .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip,
+#indexMap .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip {
+  border-top-color: rgb(43, 43, 43);
+}
+#indexMap .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+#indexMap .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip,
+#indexMap .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip {
+  border-bottom-color: rgb(43, 43, 43);
 }
