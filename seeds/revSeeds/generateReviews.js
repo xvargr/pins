@@ -8,10 +8,13 @@ const User = require("../../models/users");
 const adjectiveFile = "../words/english-adjectives.txt"; // path is relative to the node console
 const nounFile = "../words/english-nouns.txt"; // todo make path absolute
 
-mongoose.connect("mongodb://localhost:27017/libraries", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}); //connect mongoose to mongodb at this directory
+mongoose.connect(
+  "mongodb+srv://admin:wFzqjfTrJlvLcELE@cluster0.utulezr.mongodb.net/?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+); //connect mongoose to mongodb at this directory
 
 const db = mongoose.connection; //assign db shorthand to mongoose.connection
 db.on(
