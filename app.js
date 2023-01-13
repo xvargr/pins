@@ -205,6 +205,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).send("Ok");
+});
+
 // routers
 app.use("/libraries", libraryRoutes); // for routes that starts with /libraries, use the libraries router
 app.use("/libraries/:id/reviews", reviewRoutes); // for routes that starts with /libraries/:id/reviews, use the libraries router
