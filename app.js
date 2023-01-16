@@ -51,6 +51,8 @@ const userRoutes = require("./routes/users");
 const libraries = require("./models/libraries");
 // const { compile } = require("joi");
 
+mongoose.set("strictQuery", false);
+
 //connect mongoose to mongodb at this directory
 const dbUrl = process.env.ATLAS_URL || "mongodb://localhost:27017/libraries";
 mongoose.connect(dbUrl, {
@@ -221,7 +223,7 @@ app.get("/", async function (req, res) {
   //   "Content-Security-Policy",
   //   "default-src 'self' https://*.mapbox.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;"
   // );
-  res.render("libraries/home", { result }); // TODO: homepage
+  res.render("libraries/home", { result });
 });
 
 // 404 catch
