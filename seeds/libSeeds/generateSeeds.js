@@ -1,5 +1,5 @@
 //this will seed the database with randomly created test data
-
+const dotenv = require("dotenv").config();
 const mongoose = require("mongoose"); //import mongoose module to work with mongo.db from js
 const Library = require("../../models/libraries"); //import library model
 const seedName = require("./seedNames"); //import seedNames
@@ -8,10 +8,14 @@ const cities = require("./cities"); //import cities data
 const User = require("../../models/users");
 const ExpressError = require("../../utils/ExpressError");
 
+const sentencesFile = require("../words/sentences");
+
 const size = 50;
 const maxPrice = 100;
 
-mongoose.connect("", {
+mongoose.set("strictQuery", false);
+
+mongoose.connect(`${process.env.ATLAS_URL}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }); //connect mongoose to mongodb at this directory
@@ -29,12 +33,21 @@ function pickOne(array) {
   return array[Math.floor(Math.random() * array.length)];
 } //function picks one of the index of an array on random
 
-function randomPrice(max = maxPrice, min = 0) {
+function randomNumber(max = maxPrice, min = 0) {
   if (min === 0) {
     return Math.floor(Math.random() * max);
   } else {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+}
+
+function getRandomSentence() {
+  const result =
+    sentencesFile.sentences[
+      Math.floor(Math.random() * sentencesFile.sentences.length + 1)
+    ];
+
+  return result;
 }
 
 const defaultOwner = "admin";
@@ -49,23 +62,22 @@ async function seedDB() {
 
     const lib = new Library({
       name: `${pickOne(seedName.verbs)} ${pickOne(seedName.nouns)}`,
-      description:
-        "I used to practice weaving with spaghetti three hours a day but stopped because I didn't want to die alone.",
+      description: getRandomSentence(),
       images: [
         {
-          url: "https://picsum.photos/600/900?random=1",
+          url: `https://picsum.photos/600/900?random=${randomNumber(20, 1)}`,
           filename: "default",
         },
         {
-          url: "https://picsum.photos/600/900?random=2",
+          url: `https://picsum.photos/600/900?random=${randomNumber(20, 1)}`,
           filename: "default",
         },
         {
-          url: "https://picsum.photos/600/900?random=3",
+          url: `https://picsum.photos/600/900?random=${randomNumber(20, 1)}`,
           filename: "default",
         },
       ],
-      fee: randomPrice(),
+      fee: randomNumber(),
       location: `${location.city}, ${location.state}`,
       geometry: {
         type: "Point",

@@ -8,8 +8,8 @@
 
   <ul class="wideHeaderItems">
     <li><a href="/">Home</a></li>
-    <li><a href="/libraries">Thing</a></li>
-    <li><a href="/libraries/new">Make a new thing</a></li>
+    <li><a href="/libraries">Locations</a></li>
+    <li><a href="/libraries/new">Pin a new geocache</a></li>
   </ul>
 
   <div class="navbarRightCluster">
@@ -17,9 +17,11 @@
     <form action="/users/logout" data-form-type="logout">
       <button class="authButton">LOGOUT</button>
     </form>
-    <button class="authButton" id="loginButton" style="display: none;">LOG IN</button>
+    <button class="authButton" id="loginButton" style="display: none">
+      LOG IN
+    </button>
     <% } else {%>
-    <form action="/users/logout" style="display: none;" data-form-type="logout">
+    <form action="/users/logout" style="display: none" data-form-type="logout">
       <button class="authButton">LOGOUT</button>
     </form>
     <button class="authButton" id="loginButton">LOG IN</button>
@@ -35,19 +37,49 @@
 <div class="authFormOverlay" tabindex="-1">
   <div class="authContainer">
     <div class="logo">/PINS</div>
-    <form class="signInForm" action="/users/login" method="post" data-form-type="login">
-      <label>Username <input type="text" name="username" id="username" autocomplete="off">
+    <form
+      class="signInForm"
+      action="/users/login"
+      method="post"
+      data-form-type="login"
+    >
+      <label
+        >Username
+        <input type="text" name="username" id="username" autocomplete="off" />
       </label>
-      <label>Password <input type="password" name="password" id="password">
+      <label
+        >Password <input type="password" name="password" id="password" />
       </label>
       <button>Sign In</button>
     </form>
-    <form class="registerForm hidden" action="/users" method="post" data-form-type="register">
-      <label>Email <input type="email" name="user[email]" id="newEmail" autocomplete="off">
+    <form
+      class="registerForm hidden"
+      action="/users"
+      method="post"
+      form
+      data-form-type="register"
+    >
+      <label
+        >Email
+        <input
+          type="email"
+          name="user[email]"
+          id="newEmail"
+          autocomplete="off"
+        />
       </label>
-      <label>Username <input type="text" name="user[username]" id="newUsername" autocomplete="off">
+      <label
+        >Username
+        <input
+          type="text"
+          name="user[username]"
+          id="newUsername"
+          autocomplete="off"
+        />
       </label>
-      <label>Password <input type="password" name="user[password]" id="newPassword">
+      <label
+        >Password
+        <input type="password" name="user[password]" id="newPassword" />
       </label>
       <button>Register</button>
     </form>

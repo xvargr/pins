@@ -1,20 +1,36 @@
 <!-- use ejs-mate /views/boilerplate layout -->
 <% layout("layouts/boilerplate") %>
 <main>
-  <h1>Report new thing</h1>
+  <h1>Register a new geocache</h1>
 
-  <form action="/libraries" class="editForm" method="post" enctype="multipart/form-data" data-form-type="library">
+  <form
+    action="/libraries"
+    class="editForm"
+    method="post"
+    enctype="multipart/form-data"
+    data-form-type="library"
+  >
     <div>
       <label for="name">Name:</label>
       <input type="text" name="lib[name]" id="name" autocomplete="off" />
     </div>
     <div>
       <label for="description">Description:</label>
-      <input type="text" name="lib[description]" id="description" autocomplete="off" />
+      <input
+        type="text"
+        name="lib[description]"
+        id="description"
+        autocomplete="off"
+      />
     </div>
     <div>
       <label for="location">Location:</label>
-      <input type="text" name="lib[location]" id="location" autocomplete="off" />
+      <input
+        type="text"
+        name="lib[location]"
+        id="location"
+        autocomplete="off"
+      />
     </div>
     <div>
       <label for="fee">Fee:</label>
@@ -22,7 +38,13 @@
     </div>
     <div>
       <label for="img">Upload image:</label>
-      <input type="file" name="lib[img]" id="img" accept=".jpg,.jpeg,.png" multiple />
+      <input
+        type="file"
+        name="lib[img]"
+        id="img"
+        accept=".jpg,.jpeg,.png"
+        multiple
+      />
     </div>
     <div>
       <button>Submit</button>

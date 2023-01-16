@@ -218,7 +218,7 @@ input:hover {
   margin-top: 1rem;
 }
 .homeOverlay > form > a {
-  color: rgb(116, 116, 116);
+  color: rgb(77, 134, 77);
 }
 
 #homeTitle {
@@ -260,7 +260,7 @@ button:hover,
 /* Works on Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: blue orange;
+  scrollbar-color: rgb(30, 80, 1) rgb(104, 104, 104);
 }
 
 /* Works on Chrome, Edge, and Safari */
@@ -294,6 +294,8 @@ button:hover,
 
 /* form */
 .editForm {
+  max-width: 70rem;
+  margin: auto;
   padding: 1rem;
   border-radius: 2rem;
   background-color: rgb(56, 56, 56);
@@ -396,7 +398,7 @@ button:hover,
 .wideHeaderItems {
   display: flex;
   justify-content: space-evenly;
-  width: 20rem;
+  width: 25rem;
 }
 
 .mobileHeaderItems {

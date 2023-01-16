@@ -9,16 +9,21 @@
 <% } %>
 
 <main>
-  <h1>Look at all these places!</h1>
+  <h1>All geocaches</h1>
   <div class="columnContainer">
     <% if(result.length < 1) { %>
-    <p>No items yet, <a href="/libraries/new">Create a new one!</a></p>
-    <% } %>
-    <% for (let libs of result) { %>
+    <p>No geocaches yet, <a href="/libraries/new">Pin a new one!</a></p>
+    <% } %> <% for (let libs of result) { %>
     <div class="columnContent idTrue">
-      <img src="<%= libs.images[0].url %> " alt="" class="indexImage" crossorigin="anonymous" />
+      <img
+        src="<%= libs.images[0].url %> "
+        alt=""
+        class="indexImage"
+        crossorigin="anonymous"
+      />
       <div class="indexInfo">
-        <a href="/libraries/<%= libs._id %>" class="indexTitle"><%= libs.name %>
+        <a href="/libraries/<%= libs._id %>" class="indexTitle"
+          ><%= libs.name %>
         </a>
         <span><%= libs.description %></span>
         <div>
@@ -29,7 +34,7 @@
     </div>
     <% } %>
     <div class="columnContent">
-      <h4>Pin a new place!</h4>
+      <h4>Pin a new geocache!</h4>
     </div>
   </div>
 </main>
