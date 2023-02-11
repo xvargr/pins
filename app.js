@@ -140,6 +140,7 @@ app.use(
         "https://res.cloudinary.com/dndf29tdn/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT!
         "https://i.picsum.photos/",
         "https://picsum.photos/",
+        "https://fastly.picsum.photos",
       ],
       fontSrc: ["'self'", ...fontSrcUrls],
     },
@@ -147,6 +148,8 @@ app.use(
 );
 
 app.use(mongoSanitize()); // sanitizes req.query, req.params, and req.body from query injection
+// app.use(helmet({ crossOriginResourcePolicy: true }));
+// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 // use mongoSanitize({replaceWith:"_"}) to replace prohibited characters instead of removing them
 
 // serve static files
