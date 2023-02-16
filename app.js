@@ -34,12 +34,6 @@ const User = require("./models/users"); // import user model for use with passpo
 
 // const errorWrapper = require("./utils/errorWrapper"); //import error wrapper function
 const ExpressError = require("./utils/ExpressError"); //import custom error class
-
-// const Joi = require("joi"); // import joi javascript validator module // no longer required in this file as schema definition moved to own file
-// const { joiLibSchema, joiRevSchema } = require("./schemas/schemas");
-// const res = require("express/lib/response");
-// const { populate } = require("./models/libraries"); // populate not used right now
-
 const mongoSanitize = require("express-mongo-sanitize");
 
 const helmet = require("helmet");
@@ -50,7 +44,6 @@ const libraryRoutes = require("./routes/libraries");
 const reviewRoutes = require("./routes/reviews");
 const userRoutes = require("./routes/users");
 const libraries = require("./models/libraries");
-// const { compile } = require("joi");
 
 mongoose.set("strictQuery", false);
 
@@ -91,7 +84,6 @@ const sessionConfig = {
   }),
   cookie: {
     httpOnly: true, // set cookies to only be accessible through http, not js, security measure
-    // secure: true, // set cookie to only be accessible through https
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // js millisecond based time
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
@@ -149,9 +141,6 @@ app.use(
 );
 
 app.use(mongoSanitize()); // sanitizes req.query, req.params, and req.body from query injection
-// app.use(helmet({ crossOriginResourcePolicy: true }));
-// app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-// use mongoSanitize({replaceWith:"_"}) to replace prohibited characters instead of removing them
 
 // serve static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -161,11 +150,6 @@ app.use(flash()); // innit flash, now all req objects have a method called flash
 app.use(function (req, res, next) {
   res.locals.status = req.flash("status"); // just reassigns flash message to res.locals
   res.locals.message = req.flash("message"); // take the value associated with the "message" key
-  // console.log("session");
-  // console.log(req.session);
-  // console.log("locals");
-  // console.log(res.locals);
-  // console.log(req.query);
 
   // passport error special case
   const passportFlash = req.flash("error");
@@ -186,12 +170,6 @@ app.use(function (req, res, next) {
   req.session.lastPath = req.session.currPath; // where were you?
   req.session.currPath = req.path; // where are you going?
 
-  // console.log("/// APP>JS>107 ///");
-  // console.log("/// SESSION ///");
-  // console.log(req.session);
-  // console.log("/// LOCALS ///");
-  // console.log(res.locals);
-
   next(); // don't forget next, which makes this a middleware, else the request will just stop here
 });
 // this is done so that we always have req.flash in locals, and don't need to pass it to render every time
@@ -206,10 +184,6 @@ passport.deserializeUser(User.deserializeUser()); // use this method to deserial
 // pass on user info to locals
 app.use(function (req, res, next) {
   res.locals.user = req.user; // user data, else undefined if not logged in
-  // console.log(req.path);
-  // console.log("/// USER ///");
-  console.log(req.path);
-  console.log(res.header);
   next();
 });
 
@@ -225,10 +199,6 @@ app.use("/users", userRoutes);
 
 app.get("/", async function (req, res) {
   const result = await libraries.find();
-  // res.set(
-  //   "Content-Security-Policy",
-  //   "default-src 'self' https://*.mapbox.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;"
-  // );
   res.render("libraries/home", { result });
 });
 
