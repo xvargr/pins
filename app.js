@@ -43,6 +43,7 @@ const ExpressError = require("./utils/ExpressError"); //import custom error clas
 const mongoSanitize = require("express-mongo-sanitize");
 
 const helmet = require("helmet");
+const cors = require("cors");
 
 // router imports, for compartmentalizing routes
 const libraryRoutes = require("./routes/libraries");
@@ -201,16 +202,18 @@ app.use(passport.session()); // use sessions for persistent logins with passport
 passport.use(new LocalStrategy(User.authenticate())); // use local strategy authentication, with the auth method being authenticate() on the User model. that model is added to the user model with UserSchema.plugin(passLocMongoose)
 passport.serializeUser(User.serializeUser()); // use this method to serialize users, basically how to store in session????
 passport.deserializeUser(User.deserializeUser()); // use this method to deserialize users, read from session
+
 // pass on user info to locals
 app.use(function (req, res, next) {
   res.locals.user = req.user; // user data, else undefined if not logged in
   // console.log(req.path);
   // console.log("/// USER ///");
-  // console.log(req.user);
+  console.log(req.path);
+  console.log(res.header);
   next();
 });
 
-app.get("/health", (req, res) => {
+app.get("/health", cors(), (req, res) => {
   res.status(200).send("Ok");
 });
 
@@ -231,7 +234,7 @@ app.get("/", async function (req, res) {
 
 // 404 catch
 app.all("*", function (req, res, next) {
-  console.log("!--> 404 triggered");
+  console.log(`!--> 404 triggered for ${req.path}`);
   next(new ExpressError("Page Not Found", 404));
 });
 
